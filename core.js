@@ -1,0 +1,15 @@
+(function(root){
+const dayMs=86400000;
+function parseDate(s){if(!/^\d{4}-\d{2}-\d{2}$/.test(s||''))return null;const [y,m,d]=s.split('-').map(Number);const t=new Date(y,m-1,d,12);return t.getFullYear()===y&&t.getMonth()===m-1&&t.getDate()===d?t:null}
+function iso(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function shift(s,n){const d=parseDate(s);if(!d)return null;d.setDate(d.getDate()+Number(n));return iso(d)}
+function ordinal(s){const d=parseDate(s);return d?Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/dayMs:null}
+function days(s,today){const a=ordinal(s),b=ordinal(today);return a===null||b===null?null:a-b}
+function due(item){return shift(item.basis==='purchase'?item.purchased:item.delivered,item.window)}
+function active(item,today){const n=days(due(item),today);return !['kept','received'].includes(item.status)&&item.outcome!=='final'&&(item.status==='shipped'||n===null||n>=0)}
+function eligible(item,today){return active(item,today)&&item.confirmed&&item.requirement!=='unknown'&&['credit','refund'].includes(item.outcome)&&!!due(item)}
+function escape(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function icsEscape(s){return String(s).replace(/\\/g,'\\\\').replace(/\r?\n/g,'\\n').replace(/,/g,'\\,').replace(/;/g,'\\;')}
+function calendar(item,today,time){const deadline=due(item);if(item.status==='shipped'||!deadline||!active(item,today)||!item.confirmed||item.requirement==='unknown')return null;const count=days(deadline,today);const lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Back//Return reminders//EN','CALSCALE:GREGORIAN'];for(let n=0;n<=Math.min(count,365);n++){const date=shift(today,n),d=parseDate(date);const [h,m]=(time||'09:00').split(':').map(Number);d.setHours(h,m,0,0);const stamp=d.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}Z$/,'Z');const end=new Date(d.getTime()+15*60000).toISOString().replace(/[-:]/g,'').replace(/\.\d{3}Z$/,'Z');const remain=count-n;const text=remain===0?'Return deadline today':remain===1?'Return deadline tomorrow':`${remain} days left to return`;lines.push('BEGIN:VEVENT',`UID:back-${item.id}-${date}@local`,`DTSTAMP:${new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d{3}Z$/,'Z')}`,`DTSTART:${stamp}`,`DTEND:${end}`,`SUMMARY:${icsEscape(text+': '+item.name)}`,`DESCRIPTION:${icsEscape('Deadline requires: '+item.requirement+'. Next step: '+(item.next||'Review the return instructions')+'. Confirm the retailer cutoff time and allow for shipping. '+(item.url||''))}`,'BEGIN:VALARM','TRIGGER:-PT0M','ACTION:DISPLAY',`DESCRIPTION:${icsEscape(text+': '+item.name)}`,'END:VALARM','END:VEVENT')}lines.push('END:VCALENDAR');return lines.join('\r\n')+'\r\n'}
+const api={parseDate,iso,shift,days,due,active,eligible,escape,calendar};if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.BackCore=api;
+})(typeof window!=='undefined'?window:globalThis);

@@ -1,0 +1,14 @@
+{
+  "name": "returnly",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Back: purchase return deadlines, checklists, refunds and store credit tracking",
+  "scripts": {
+    "dev": "node scripts/serve.cjs",
+    "start": "node scripts/serve.cjs",
+    "test": "node --test tests/core.test.cjs tests/import.test.cjs"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
