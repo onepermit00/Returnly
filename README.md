@@ -1,6 +1,6 @@
 # Returnly
 
-A working first version of **Back**, a purchase-return tracker. The landing page and desktop app use an On-inspired editorial design, with original campaign imagery.
+A working first version of **Returnly**, a purchase-return tracker. The landing page and desktop app use an On-inspired editorial design, with original campaign imagery.
 
 ## Run locally
 

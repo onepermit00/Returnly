@@ -1,4 +1,4 @@
-# Back — On-inspired redesign
+# Returnly — On-inspired redesign
 
 Open index.html for the landing page, then choose **Your space** for the desktop app. The active local preview is http://127.0.0.1:4173/index.html while its server is running.
 
@@ -22,7 +22,7 @@ Examples are labeled and included in totals until cleared. Unknown or unconfirme
 
 Dates are calendar estimates. Check exact cutoff times, exclusions and shipping requirements with the retailer. The suggested three-day buffer is not a shipping-time guarantee.
 
-Calendar alerts need enabling in your calendar. Exports are independent copies: update/remove them when the item changes, and avoid duplicate imports. Back cannot update previously exported events.
+Calendar alerts need enabling in your calendar. Exports are independent copies: update/remove them when the item changes, and avoid duplicate imports. Returnly cannot update previously exported events.
 
 Purchases save on this browser and origin. Clearing browser data removes them. There is no cross-device sync. Live AI policy research, receipt OCR, automatic refund tracking and background notifications are not connected. Browser notifications require permission and an open app.
 
