@@ -1,20 +1,45 @@
-# Returnly — Klarna-inspired first version
+# Returnly
 
-Open this folder in VS Code. Install Node.js 22 or later, then run `npm start`. No dependency installation is required. Open http://localhost:4174/index.html, /signup.html or /app.html. For port 4173 in PowerShell, run `$env:PORT='4173'` before `npm start`.
+Track purchases, return deadlines and refunds. Scan a receipt, tap what you're returning, and Returnly reminds you until the money is back.
 
-Implemented: local profile setup; editorial photo dashboard and mobile gallery; receipt/order evidence selection; multiple product-photo uploads; manual editable item review; Keep / Return / Decide later; six-product example; sourced return-plan editor; checklist and return progress; actual refund and store-credit totals; calendar deadlines and daily ICS reminders; open-app notifications; CSV import/export and JSON backup.
+## Run locally
 
-Existing purchases and preferences keep the `back-purchases-v1` and `back-reminders-v1` keys. Each browser origin has its own records; localhost and 127.0.0.1 are separate origins. Receipt evidence is session-only, not archived. Product photos up to 1.5 MB each can persist, subject to storage quota. Use JSON export to back up purchases. Examples are visibly labeled and included in totals until removed.
+Requires Node.js 22 or newer.
 
-Not connected: live AI/OCR, automatic policy research, real account authentication/sync, payments, retailer return submission, SMS and background push. Photos require manual names/prices. Example images are illustrative. Fashion Nova's earlier researched reference must be rechecked against the user's order; other example policies are fictional.
+```sh
+npm install
+npm start
+```
 
-Returned-item count includes sent and received items. Actual cash/credit totals include only recorded received amounts, not pending purchase value. Confirm eligibility, cutoff times, conditions and fees before acting.
+Open http://127.0.0.1:4174/. Without `DATABASE_URL`, accounts are saved to `data/dev-store.json` (git-ignored) so sign up and sign in work locally. Set `PORT` to use another port.
 
-Run `npm test` for 11 meaningful checks covering dates, calendar exports, CSV validation, escaping and received-value aggregation. Browser verification covered local setup, real photo upload/review, example review → return plan → sent → actual refund, dashboard update, policy editor, and mobile gallery overflow.
+```sh
+npm test
+```
 
-See docs/klarna-design-notes.md for references. The previous design notes remain available. No GitHub push or public deployment was performed.
+## Accounts
 
-## Refero precision revision
-Dashboard now follows the exact structural language of the three provided Klarna creator/post screens: centered compact profile, circular utility controls, unboxed received totals, four-column media, thin filter labels and black functional footer. Return plans use a narrow media column and a three-by-two information grid, with policy/checklist/reminder disclosures. Sign-in/local onboarding follow Refero Klarna auth flow 1414 with a single centered panel and progressive steps. Online authentication is still not connected; local entry does not verify identity. See docs/refero-precision-notes.md for the screenshot IDs and design decisions. Product text and imagery are Returnly-specific, so this is a close structural reproduction rather than a pixel-identical copy of Klarna's content.
+- `server.js` serves the app and a JSON API under `/api`: `signup`, `login`, `logout`, `me`, `data` (GET/PUT) and `account` (DELETE, needs the password).
+- Passwords are hashed with scrypt. Sessions are random tokens in an HttpOnly, SameSite=Lax cookie (Secure in production); only a SHA-256 of each token is stored. Sessions last 30 days.
+- Each account's purchases, reminders and profile are one JSON document in Postgres (`user_data`). The app keeps a copy in the browser and uploads changes in the background; the last write wins. Signing in on another device downloads that copy.
+- Sign-in is rate limited per IP, and an email is locked for 15 minutes after 10 wrong passwords. Writes must be same-origin JSON.
+- Not built yet: password reset by email (needs an email service), sign-in with Google or Apple, and photo storage outside the database (photos are saved inside the account's JSON, up to 12 MB per save).
 
-Entry routing: new users finish setup and enter app.html#upload. Returning users continue from signin.html to their dashboard at app.html. The top Add purchase button opens the guided camera/upload flow.
+## Deploy on Render
+
+`render.yaml` is a Blueprint for a Node web service plus a Postgres database. In Render choose **New → Blueprint**, pick this repository and apply. `DATABASE_URL` is wired from the database automatically and the server refuses to start in production without it. Render's free Postgres expires after 30 days; move it to a paid plan before real users rely on it.
+
+## Project layout
+
+- `index.html`, `landing.css`: home page with Sign in / Sign up.
+- `signin.html`, `signup.html`, `auth.js`: account pages.
+- `account.js`: sign-in gate for the app and background sync.
+- `app.html` and its scripts: `app.js`, `features.js`, `klarna.js`, `precision.js`, `guided.js` (four-step return journey), `menu.js` (side menu, History, Settings, Support).
+- `core.js`: date, eligibility and calendar logic.
+- `server.js`, `server/`: account API, database access and static file server. Only top-level app files and `assets/` are publicly served.
+- `tests/`: automated tests (`npm test`).
+- `docs/`: product and design notes.
+
+## Current limits
+
+Receipt reading (OCR), automatic return-policy research, SMS and background push are not connected. Deadlines are estimates until the user confirms the retailer's policy. The Terms of service page is a draft and needs review before launch.
