@@ -16,3 +16,6 @@ button.profile-circle{border:0;color:#111;cursor:pointer;font-family:inherit}
 .profile-hero h1{font-size:29px}.profile-hero>p{font-size:15.5px}.profile-hero .profile-circle{font-size:28px}
 .return-results small{font-size:12px}.return-results strong{font-size:22px}
 @media(max-width:650px){.profile-hero h1{font-size:27px}.profile-hero>p{font-size:15px}.return-results small{font-size:11px}.return-results strong{font-size:21px}}
+/* Larger profile circle. */
+.profile-hero .profile-circle{width:104px;height:104px;font-size:34px}.profile-photo-badge{width:30px;height:30px;font-size:17px}
+@media(max-width:650px){.profile-hero .profile-circle{width:96px;height:96px;font-size:31px}}
