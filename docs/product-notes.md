@@ -29,3 +29,14 @@ Purchases save on this browser and origin. Clearing browser data removes them. T
 ## Validation
 
 Nine automated tests passed: deadline bases, leap/DST date math, expiry and pending outcomes, unconfirmed eligibility, calendar reminders, escaping, and CSV parsing/validation. Browser checks covered desktop at 1440px and mobile at 390px, calendar day selection, checklist reopening, import preview and separate received totals. No horizontal overflow or JavaScript errors appeared in those checks. Notification permission was not requested during testing.
+
+## Four-step return journey
+
+Reduced from nine screens to the four actions only a person can do:
+
+1. **Scan** the receipt.
+2. **Tap Return** on a photo grid of every item. Everything else is saved as kept. Store, date and online/in-store sit in one collapsed "Edit" row.
+3. **Return it**: deadline, return portal, checklist (collapsed), then "I sent it back".
+4. **Get paid**: confirm the amount received.
+
+Daily reminders switch on automatically when at least one item is marked for return. With no delivery date, the deadline counts from the purchase date, the earlier and safer date.

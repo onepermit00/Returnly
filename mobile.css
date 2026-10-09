@@ -10,3 +10,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 .photo-gallery .visual-card{margin:0;min-width:0}
 .card-bottom button{white-space:nowrap}
 }
+@media(max-width:760px){
+/* .detail-modal's 800px max-width overrode the viewport cap, leaving dialogs 570px wide on phones. */
+dialog{max-width:calc(100vw - 24px)!important}
+}

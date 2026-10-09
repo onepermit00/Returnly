@@ -2,5 +2,22 @@
 
 @media(min-width:601px){.camera-window{max-height:270px}.guided-flow{margin-top:14px}.camera-shell{padding-top:20px}}
 
-.guided-flow:has(#flow-item-form)>.product-photo{height:220px;aspect-ratio:auto!important;background-size:contain;background-color:#f8f7f5}.guided-flow:has(#flow-item-form) .guided-form label{margin:14px 0}.guided-flow:has(#flow-item-form) .intro{margin-bottom:16px}.receipt-preview small{display:block;color:#777;margin-top:5px}.receipt-preview strong{overflow-wrap:anywhere}.guided-form .packing-row input{margin:0;width:16px}
+.guided-flow:has(#flow-item-form) .intro{margin-bottom:16px}.receipt-preview small{display:block;color:#777;margin-top:5px}.receipt-preview strong{overflow-wrap:anywhere}.guided-form .packing-row input{margin:0;width:16px}
 @media(min-width:601px){.camera-window{width:100%;height:270px;aspect-ratio:auto}}
+.pick-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:18px;border:1px solid #eee;border-radius:16px}.pick-header small{font-size:10px;letter-spacing:.08em;color:#777}.pick-header strong{display:block;font-size:24px;letter-spacing:-.6px;margin:4px 0}.pick-header span{font-size:12px;color:#666}.pick-header em{font-style:normal;font-size:11px;background:#f2f2f2;border-radius:30px;padding:6px 10px;white-space:nowrap;display:flex;gap:4px;align-items:center}.pick-header em svg{width:12px;height:12px}
+.pick-edit{margin:10px 0 0;font-size:12px}.pick-edit summary{cursor:pointer;color:#666;text-decoration:underline;text-underline-offset:3px;padding:6px 0}
+.pick-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px}.pick-meta label{margin:12px 0 0}.guided-form .pick-meta input{min-width:0}
+.pick-channel{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0 4px}.pick-channel button{padding:11px;border:1px solid #ddd;background:white;border-radius:30px;font-size:12px;cursor:pointer}.pick-channel button.active{background:#111;color:white;border-color:#111}
+.pick-grid{list-style:none;margin:18px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.pick-card{border:1px solid #eee;border-radius:14px;padding:8px 8px 10px;display:flex;flex-direction:column;min-width:0;transition:border-color .15s}
+.pick-card.is-return{border-color:#111;box-shadow:0 0 0 1px #111}
+.pick-photo{position:relative;display:block;cursor:pointer;border-radius:10px;overflow:hidden}.pick-photo:focus-visible{outline:2px solid #111;outline-offset:2px}.pick-photo .product-photo{width:100%;aspect-ratio:1!important;border-radius:10px}.pick-photo .product-photo img{width:100%;height:100%;object-fit:cover}
+.pick-photo-hint{position:absolute;inset:auto 8px 8px;text-align:center;font-size:11px;background:#fffffff0;border-radius:20px;padding:5px}
+.guided-form .pick-name{border:0;border-bottom:1px dashed transparent;border-radius:0;padding:4px 0;margin:10px 0 0;font-weight:600;background:none;min-width:0;width:100%}
+.pick-price{display:flex;align-items:center;gap:1px;margin:0!important;font-size:13px;color:#555}.guided-form .pick-price input{border:0;border-bottom:1px dashed transparent;border-radius:0;padding:4px 0;margin:0;background:none;color:#555;min-width:0}
+.guided-form .pick-name:placeholder-shown,.guided-form .pick-price input:placeholder-shown{border-bottom-color:#bbb}.guided-form .pick-name:focus,.guided-form .pick-price input:focus{outline:0;border-bottom:1px solid #111}
+.pick-toggle{width:100%;margin-top:10px;padding:11px 8px;border:1px solid #111;background:#111;color:white;border-radius:30px;font-size:12px;cursor:pointer}
+.pick-card.is-return .pick-toggle{background:white;color:#111}
+.pick-cta{position:sticky;bottom:0;background:linear-gradient(#fff0,#fff 30%);padding:4px 0 12px;z-index:2}.pick-cta .primary{margin-top:12px}
+@media(max-width:600px){.pick-header{padding:14px}.pick-header strong{font-size:21px}.pick-grid{gap:10px}.pick-card{padding:6px 6px 8px}}
+.guided-form .pick-photo{margin:0}.guided-form .pick-price{display:flex;margin:0}.guided-form .pick-name{resize:none;overflow:hidden;line-height:1.25;font-family:inherit;color:#111;height:2.7em}
