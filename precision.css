@@ -19,3 +19,5 @@ button.profile-circle{border:0;color:#111;cursor:pointer;font-family:inherit}
 /* Larger profile circle. */
 .profile-hero .profile-circle{width:104px;height:104px;font-size:34px}.profile-photo-badge{width:30px;height:30px;font-size:17px}
 @media(max-width:650px){.profile-hero .profile-circle{width:96px;height:96px;font-size:31px}}
+/* Larger profile tab buttons. */
+.profile-tools{gap:12px}.profile-tools button{width:46px;height:46px}.profile-tools .icon{width:20px;height:20px}
