@@ -6,11 +6,15 @@ const menuItems=[['overview','Your purchases','home'],['calendar','Your returns'
 const menuViews=['history-log','settings','my-profile','privacy','terms','support'];
 const settingsParent={'my-profile':'settings',privacy:'settings',terms:'settings'};
 
-/* The three profile tabs now live in the menu. */
+/* The three profile tabs, tagline and totals now live in the menu. */
 profileTools=()=>'';
+const galleryBeforeMenu=gallery,profileHeaderBeforeMenu=profileHeader;
+gallery=function(){const el=document.createElement('div');el.innerHTML=galleryBeforeMenu();el.querySelectorAll('.profile-hero>p,.profile-hero .return-results,.profile-hero .caption').forEach(n=>n.remove());return el.innerHTML};
+profileHeader=()=>profileHeaderBeforeMenu().replace('<p>Keep the things you love. Return the rest.</p>','');
+function menuStats(){const r=resultValues();return `<dl class="menu-stats">${[['Returned',r.returned],['Refunds',money(r.refund)],['Store credit',money(r.credit)]].map(([k,v])=>`<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>`}
 
 function welcomeName(){return profile.name&&profile.name.toLowerCase()!=='you'?profile.name:''}
-function drawerHTML(){return `<dialog id="menu-drawer" class="menu-drawer" aria-label="Menu"><div class="menu-head"><h2>Welcome${welcomeName()?`,<br>${esc(welcomeName())}!`:'!'}</h2><p>Saved on this device · no online account</p></div><nav class="menu-list">${menuItems.map(([v,label,ic])=>`<button data-menu-go="${v}" class="${view===v||(v==='settings'&&settingsParent[view])?'active':''}">${menuIcon(menuIcons[ic])}<span>${label}</span></button>`).join('')}</nav><div class="menu-foot"><strong>Returnly.</strong><span>v.${APP_VERSION}</span></div></dialog>`}
+function drawerHTML(){return `<dialog id="menu-drawer" class="menu-drawer" aria-label="Menu"><div class="menu-head"><h2>Welcome${welcomeName()?`,<br>${esc(welcomeName())}!`:'!'}</h2>${menuStats()}</div><nav class="menu-list">${menuItems.map(([v,label,ic])=>`<button data-menu-go="${v}" class="${view===v||(v==='settings'&&settingsParent[view])?'active':''}">${menuIcon(menuIcons[ic])}<span>${label}</span></button>`).join('')}</nav><div class="menu-foot"><strong>Returnly.</strong><span>v.${APP_VERSION}</span></div></dialog>`}
 function ensureMenuChrome(){const header=$('.global-header');if(header&&!$('#menu-open')){header.insertAdjacentHTML('afterbegin',`<button id="menu-open" class="menu-open" aria-label="Open menu" aria-haspopup="dialog">${menuIcon(menuIcons.menu)}</button>`)}if(!$('#menu-drawer'))document.body.insertAdjacentHTML('beforeend','<dialog id="menu-drawer" class="menu-drawer" aria-label="Menu"></dialog>')}
 function openMenu(){const d=$('#menu-drawer');d.outerHTML=drawerHTML();const n=$('#menu-drawer');n.showModal();n.querySelector('.menu-list button')?.focus()}
 function closeMenu(){const d=$('#menu-drawer');if(d?.open)d.close()}
