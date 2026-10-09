@@ -1,0 +1,12 @@
+/* Phone layout fixes, loaded last on every page. */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+@media(max-width:760px){
+/* iOS Safari zooms into any field under 16px and leaves the page shifted. */
+input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{font-size:16px!important}
+}
+@media(max-width:650px){
+/* Row-aligned grid instead of masonry columns, so cards keep reading order and don't jump between columns. */
+.photo-gallery{columns:auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:14px;row-gap:22px;align-items:start}
+.photo-gallery .visual-card{margin:0;min-width:0}
+.card-bottom button{white-space:nowrap}
+}
