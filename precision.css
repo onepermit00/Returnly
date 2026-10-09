@@ -7,3 +7,33 @@
 .profile-tools button{cursor:pointer}.profile-tools button.active{background:#111;color:white}.profile-tools button:focus-visible,button.profile-circle:focus-visible{outline:2px solid #111;outline-offset:2px}
 button.profile-circle{border:0;color:#111;cursor:pointer;font-family:inherit}
 .profile-hero-compact{padding-bottom:8px}
+/* Profile and gallery polish: bold, clear type and uniform portrait photos (structure after Klarna's profile page). Layout and flow unchanged. */
+.product-photo.cardigan,.product-photo.tote,.product-photo.loafers,.product-photo.sneakers,.product-photo.woven,.product-photo.dress{background-size:cover;background-position:center}
+.product-photo.cardigan{background-image:url(assets/demo-cardigan.jpg)}.product-photo.tote{background-image:url(assets/demo-tote.jpg)}.product-photo.loafers{background-image:url(assets/demo-loafers.jpg)}.product-photo.sneakers{background-image:url(assets/demo-sneakers.jpg)}.product-photo.woven{background-image:url(assets/demo-woven.jpg)}.product-photo.dress{background-image:url(assets/demo-dress.jpg)}
+.photo-gallery .product-photo{aspect-ratio:3/4!important;border-radius:14px}
+.profile-avatar{position:relative;width:120px;margin:0 auto 18px}
+.profile-hero .profile-circle{width:120px;height:120px;font-size:40px;font-weight:700;overflow:hidden;margin:0 auto 18px;padding:0}
+.profile-avatar .profile-circle{margin:0;cursor:pointer}.profile-circle img{width:100%;height:100%;object-fit:cover;display:block}
+.profile-photo-badge{position:absolute;right:2px;bottom:2px;width:32px;height:32px;border-radius:50%;background:#111;color:white;border:3px solid white;display:grid;place-items:center;font-size:17px;line-height:1;cursor:pointer;padding:0}
+.profile-hero h1{font-size:38px;font-weight:700;letter-spacing:-1.2px;color:#111;margin-bottom:10px}
+.profile-hero>p{font-size:17px;color:#222;margin-bottom:20px}
+.return-results small{font-size:13px;color:#555}.return-results strong{font-size:28px;font-weight:700;letter-spacing:-.6px;color:#111}
+.profile-hero .caption{font-size:13px;color:#666}
+.gallery-filters button{font-size:15px;color:#666;font-weight:500}.gallery-filters button.active{color:#111;font-weight:700;border-bottom:2px solid #111}
+#gallery-search{font-size:15px}
+.visual-card h3{font-size:17px;font-weight:700;letter-spacing:-.3px;color:#111;margin:12px 0 4px}
+.visual-card .product-meta{font-size:14px;color:#444}
+.card-bottom .card-label{font-size:13px;color:#666}.card-bottom button{font-size:14px;font-weight:600;color:#111}
+@media(max-width:650px){
+.profile-avatar{width:96px}.profile-hero .profile-circle{width:96px;height:96px;font-size:32px}
+.profile-hero h1{font-size:28px;letter-spacing:-.8px}.profile-hero>p{font-size:15px}
+.return-results small{font-size:11.5px}.return-results strong{font-size:22px}
+.gallery-filters button{font-size:14px}
+.visual-card h3{font-size:15px;margin-top:10px}.visual-card .product-meta{font-size:13px}
+.card-bottom .card-label{font-size:12px}.card-bottom button{font-size:13px}
+}
+.profile-hero .profile-circle{color:#111}
+.return-results>div{display:flex;flex-direction:column;justify-content:flex-end}
+@media(max-width:650px){.gallery-filters{flex-wrap:nowrap;gap:11px;overflow-x:auto;scrollbar-width:none}.gallery-filters::-webkit-scrollbar{display:none}.gallery-filters button{font-size:13px;white-space:nowrap;flex:none}}
+.visual-card .product-meta{font-size:14px!important}
+@media(max-width:650px){.visual-card .product-meta{font-size:13px!important}}
