@@ -39,3 +39,5 @@ dialog.menu-drawer::backdrop{background:#0006;backdrop-filter:none}
 .danger-button{margin-top:30px;width:100%;padding:15px;border:1.5px solid #b42318;color:#b42318;background:white;border-radius:40px;font-size:15px;cursor:pointer;font-family:inherit}
 @media(max-width:650px){.global-header{padding:0 14px 0 8px}.sub-title{font-size:32px}.settings-list,.prose .settings-row{margin:0 -20px}.settings-row{padding:22px 20px;font-size:17px}}
 @media(prefers-reduced-motion:reduce){dialog.menu-drawer[open]{animation:none}}
+.global-header .menu-open{margin-right:auto}
+.global-header>div{margin-left:auto}
