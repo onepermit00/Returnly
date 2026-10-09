@@ -46,3 +46,8 @@ dialog.menu-drawer::backdrop{background:#0006;backdrop-filter:none}
 .menu-stats>div{display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-top:1px solid #f0f0f0}
 .menu-stats dt{font-size:15px;color:#666}.menu-stats dd{margin:0;font-size:17px;font-weight:700;color:#111}
 dialog.menu-drawer{overflow-y:auto}
+/* Filter tabs spread across the full row as one tab bar. */
+.gallery-controls .gallery-filters{flex:1;display:flex;flex-wrap:nowrap;gap:0;border-bottom:1px solid #e6e6e6}
+.gallery-filters button{flex:1 1 auto;text-align:center;white-space:nowrap;font-size:14px;padding:12px 6px;margin-bottom:-1px;border-bottom:2px solid transparent}
+.gallery-filters button.active{border-bottom:2px solid #111;color:#111;font-weight:600}
+@media(max-width:650px){.gallery-filters button{font-size:13px;padding:11px 4px}}
