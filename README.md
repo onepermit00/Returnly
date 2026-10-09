@@ -1,49 +1,20 @@
-# Returnly
+# Returnly — Klarna-inspired first version
 
-A working first version of **Returnly**, a purchase-return tracker. The landing page and desktop app use an On-inspired editorial design, with original campaign imagery.
+Open this folder in VS Code. Install Node.js 22 or later, then run `npm start`. No dependency installation is required. Open http://localhost:4174/index.html, /signup.html or /app.html. For port 4173 in PowerShell, run `$env:PORT='4173'` before `npm start`.
 
-## Run locally
+Implemented: local profile setup; editorial photo dashboard and mobile gallery; receipt/order evidence selection; multiple product-photo uploads; manual editable item review; Keep / Return / Decide later; six-product example; sourced return-plan editor; checklist and return progress; actual refund and store-credit totals; calendar deadlines and daily ICS reminders; open-app notifications; CSV import/export and JSON backup.
 
-Requires Node.js 22 or newer. No dependency install is needed.
+Existing purchases and preferences keep the `back-purchases-v1` and `back-reminders-v1` keys. Each browser origin has its own records; localhost and 127.0.0.1 are separate origins. Receipt evidence is session-only, not archived. Product photos up to 1.5 MB each can persist, subject to storage quota. Use JSON export to back up purchases. Examples are visibly labeled and included in totals until removed.
 
-```sh
-npm start
-```
+Not connected: live AI/OCR, automatic policy research, real account authentication/sync, payments, retailer return submission, SMS and background push. Photos require manual names/prices. Example images are illustrative. Fashion Nova's earlier researched reference must be rechecked against the user's order; other example policies are fictional.
 
-Open http://127.0.0.1:4174/ for the landing page. Choose **Your space** for the app. Set `PORT` to use another port. The development server binds only to localhost.
+Returned-item count includes sent and received items. Actual cash/credit totals include only recorded received amounts, not pending purchase value. Confirm eligibility, cutoff times, conditions and fees before acting.
 
-```sh
-npm test
-```
+Run `npm test` for 11 meaningful checks covering dates, calendar exports, CSV validation, escaping and received-value aggregation. Browser verification covered local setup, real photo upload/review, example review → return plan → sent → actual refund, dashboard update, policy editor, and mobile gallery overflow.
 
-Nine tests cover deadline calculations, calendar reminders, eligibility, escaping, and CSV parsing/validation.
+See docs/klarna-design-notes.md for references. The previous design notes remain available. No GitHub push or public deployment was performed.
 
-## Features
+## Refero precision revision
+Dashboard now follows the exact structural language of the three provided Klarna creator/post screens: centered compact profile, circular utility controls, unboxed received totals, four-column media, thin filter labels and black functional footer. Return plans use a narrow media column and a three-by-two information grid, with policy/checklist/reminder disclosures. Sign-in/local onboarding follow Refero Klarna auth flow 1414 with a single centered panel and progressive steps. Online authentication is still not connected; local entry does not verify identity. See docs/refero-precision-notes.md for the screenshot IDs and design decisions. Product text and imagery are Returnly-specific, so this is a close structural reproduction rather than a pixel-identical copy of Klarna's content.
 
-- Online and in-store purchase tracking, countdowns, search and filters.
-- Monthly deadline calendar with day selection.
-- Separate refund and store-credit totals, pending returns, and actual received amounts.
-- Return timeline and saved packing checklist.
-- CSV file/paste import with validated preview, template and export.
-- Fashion Nova policy reference researched October 8, 2026, with user confirmation.
-- Daily calendar reminder exports and notifications while the app is open.
-
-## Project layout
-
-- `index.html`, `landing.css`: landing page.
-- `app.html`, `app.js`, `features.js`: application screens and interactions.
-- `core.js`: date, eligibility and calendar logic.
-- `style.css`, `on.css`: application styles.
-- `tests/`: automated tests.
-- `docs/`: product notes and review of 100 Refero screen previews/layouts.
-- `scripts/serve.cjs`: development server.
-
-## Current limits
-
-Purchases save in browser local storage, scoped to the browser and origin. There is no account or cross-device sync. Clearing browser data removes purchases. Example purchases are labeled and included in totals until cleared.
-
-Live AI policy research, receipt OCR, automatic refund tracking and background push are not connected. The app explains these limits. Unknown or unconfirmed eligibility is excluded from potential value; received totals use amounts entered by the user. Potential value is before fees.
-
-Deadline dates need retailer confirmation, including exclusions, cutoff time and shipping requirements. Exported calendar events are independent copies and require alerts enabled in the calendar app. Update or remove them after changing a purchase.
-
-See [product notes](docs/product-notes.md) and [design review](docs/design-review.md).
+Entry routing: new users finish setup and enter app.html#upload. Returning users continue from signin.html to their dashboard at app.html. The top Add purchase button opens the guided camera/upload flow.

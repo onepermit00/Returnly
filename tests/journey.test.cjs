@@ -1,0 +1,5 @@
+const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
+const source=fs.readFileSync('klarna.js','utf8');const fn=source.slice(source.indexOf('function resultValues()'),source.indexOf('function visualCard('));
+function totals(items){return vm.runInNewContext(fn+'; JSON.stringify(resultValues())',{items})}
+test('returned items count sent items while received totals exclude pending and kept items',()=>{const records=[{status:'shipped',quantity:2,price:100,outcome:'refund'},{status:'received',quantity:1,price:90,received:75,outcome:'refund'},{status:'received',received:30,outcome:'credit'},{status:'kept',received:999,outcome:'refund'},{status:'started',price:200,outcome:'refund'}];assert.deepEqual(JSON.parse(totals(records)),{returned:4,refund:75,credit:30})});
+test('zero received value stays zero and exchanges are not counted as cash',()=>{assert.deepEqual(JSON.parse(totals([{status:'received',received:0,outcome:'refund'},{status:'received',received:50,outcome:'exchange'}])),{returned:2,refund:0,credit:0})});

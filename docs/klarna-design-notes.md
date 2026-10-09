@@ -1,0 +1,5 @@
+# Klarna reference lock
+References: Refero screens 5e8267f8-93a5-464e-8378-f10ba19759b8, 95c13cfc-b3c5-491a-aa62-804285365bc5, 642d02ea-1f77-466a-a3a8-0c1fe1b104c2. Previously inspected in full; user approved their visual direction and the resulting Returnly concept.
+Keep: white canvas, centered profile intro, compact black pill actions, four-column photographic masonry, large split product/return-plan screen, generous whitespace.
+Journey: local signup → purchase evidence → editable product review → keep/later/return → sourced policy/deadline → return checklist → actual refund/credit confirmation.
+Product decisions: preserve browser storage, show example imagery as illustrative; actual uploads require manual review until OCR is connected. No fake account, live AI, SMS, or background notification claims. Returned count includes sent/received; actual cash and credit are separate from potential value. Receipt/order evidence and product photos are complementary; evidence uploads are session-only and photos persist if browser storage permits.

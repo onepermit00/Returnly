@@ -6,9 +6,12 @@
   "scripts": {
     "dev": "node scripts/serve.cjs",
     "start": "node scripts/serve.cjs",
-    "test": "node --test tests/core.test.cjs tests/import.test.cjs"
+    "test": "node --test tests/core.test.cjs tests/import.test.cjs tests/journey.test.cjs tests/capture.test.cjs tests/entry.test.cjs"
   },
   "engines": {
     "node": ">=22"
   }
 }
+
+
+
