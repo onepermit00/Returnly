@@ -68,11 +68,12 @@ button.flow-tab:focus-visible{outline:2px solid #111;outline-offset:2px}
 .guided-flow .plan-split .plan-input input{font-size:20px;padding:2px 0;color:#111}
 .pick-grid.single .plan-card .pick-photo .product-photo{height:210px}
 @media(max-width:600px){.pick-grid.single .plan-card .pick-photo .product-photo{height:auto;max-height:340px}}
-/* Return tab: store and return-by date are editable in place. */
-.plan-meta{display:flex;align-items:baseline;gap:0}
-.plan-meta>span{white-space:nowrap}
-.guided-flow .plan-store{border:0;border-bottom:1px dashed #bbb;border-radius:0;background:none;padding:2px 0;margin:0;font:inherit;font-size:12px;color:#111;width:auto;min-width:0;flex:0 1 150px}
-.guided-flow .plan-store::placeholder{color:#999}
-.guided-flow .plan-date{border:0;border-bottom:1px dashed #bbb;border-radius:0;background:none;padding:0 0 2px;margin:4px 0 0;font:inherit;font-size:24px;font-weight:700;letter-spacing:-.6px;color:#111;width:auto;min-width:0;cursor:pointer}
-.guided-flow .plan-store:focus,.guided-flow .plan-date:focus{outline:0;border-bottom:1px solid #111}
-.plan-meta>span{margin-left:6px}
+/* Return tab: name, store and date lines use the Item card's own name/price styles (.guided-form .pick-price). */
+.plan-card .plan-name{font-size:13.33px;padding:4px 0}
+.plan-line{margin-top:2px!important}
+.plan-when>span{white-space:nowrap;margin-right:6px}
+.plan-when>em{font-style:normal;font-size:12px;color:#777;white-space:nowrap;margin-left:8px}
+.plan-card .flow-text-link{margin:10px 0 0}
+@media(max-width:600px){.plan-card .plan-name{font-size:16px}}
+.pick-grid.single.plan-grid.guided-form .plan-card .pick-photo .product-photo{height:246px}
+@media(max-width:600px){.pick-grid.single.plan-grid.guided-form .plan-card .pick-photo .product-photo{height:auto;max-height:367px}}
