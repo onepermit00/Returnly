@@ -25,3 +25,7 @@ button.profile-circle{border:0;color:#111;cursor:pointer;font-family:inherit}
 .photo-gallery{columns:auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));column-gap:24px;row-gap:32px;align-items:start}
 .photo-gallery .visual-card{margin:0;min-width:0}
 @media(max-width:900px){.photo-gallery{grid-template-columns:repeat(3,minmax(0,1fr))}}
+/* The dashboard rhythm, by position in each row of four: medium, short, tall, tall (the example photos' shapes).
+   Your own photos and placeholders follow it; example photos keep their fixed crops. */
+.photo-gallery>.visual-card:nth-child(4n+1) .product-photo:not(.dress):not(.loafers):not(.tote):not(.cardigan):not(.sneakers):not(.woven){aspect-ratio:350/297}
+.photo-gallery>.visual-card:nth-child(4n+2) .product-photo:not(.dress):not(.loafers):not(.tote):not(.cardigan):not(.sneakers):not(.woven){aspect-ratio:350/240}
