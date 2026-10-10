@@ -21,11 +21,8 @@ button.profile-circle{border:0;color:#111;cursor:pointer;font-family:inherit}
 @media(max-width:650px){.profile-hero .profile-circle{width:96px;height:96px;font-size:31px}}
 /* Larger profile tab buttons. */
 .profile-tools{gap:12px}.profile-tools button{width:46px;height:46px}.profile-tools .icon{width:20px;height:20px}
-/* Dashboard: one purchase per column, rows top-aligned, each photo at its own height. Same layout however many items there are. */
-.photo-gallery{columns:auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));column-gap:24px;row-gap:32px;align-items:start}
-.photo-gallery .visual-card{margin:0;min-width:0}
-@media(max-width:900px){.photo-gallery{grid-template-columns:repeat(3,minmax(0,1fr))}}
-/* The dashboard rhythm, by position in each row of four: medium, short, tall, tall (the example photos' shapes).
-   Your own photos and placeholders follow it; example photos keep their fixed crops. */
-.photo-gallery>.visual-card:nth-child(4n+1) .product-photo:not(.dress):not(.loafers):not(.tote):not(.cardigan):not(.sneakers):not(.woven){aspect-ratio:350/297}
-.photo-gallery>.visual-card:nth-child(4n+2) .product-photo:not(.dress):not(.loafers):not(.tote):not(.cardigan):not(.sneakers):not(.woven){aspect-ratio:350/240}
+/* Dashboard masonry (columns are built in precision.js): no gaps under short photos. */
+.photo-gallery.masonry{columns:auto;display:flex;align-items:flex-start;gap:24px}
+.gallery-col{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:32px}
+.gallery-col .visual-card{margin:0;min-width:0}
+@media(max-width:650px){.photo-gallery.masonry{gap:14px}.gallery-col{gap:22px}}
