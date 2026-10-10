@@ -21,3 +21,7 @@ button.profile-circle{border:0;color:#111;cursor:pointer;font-family:inherit}
 @media(max-width:650px){.profile-hero .profile-circle{width:96px;height:96px;font-size:31px}}
 /* Larger profile tab buttons. */
 .profile-tools{gap:12px}.profile-tools button{width:46px;height:46px}.profile-tools .icon{width:20px;height:20px}
+/* Dashboard: one purchase per column, rows top-aligned, each photo at its own height. Same layout however many items there are. */
+.photo-gallery{columns:auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));column-gap:24px;row-gap:32px;align-items:start}
+.photo-gallery .visual-card{margin:0;min-width:0}
+@media(max-width:900px){.photo-gallery{grid-template-columns:repeat(3,minmax(0,1fr))}}
