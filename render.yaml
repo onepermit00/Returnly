@@ -1,18 +1,22 @@
 services:
   - type: web
-    runtime: static
     name: returnly
+    runtime: node
+    plan: free
     branch: main
-    buildCommand: ""
-    staticPublishPath: .
-    pullRequestPreviewsEnabled: false
-    headers:
-      - path: /*
-        name: X-Content-Type-Options
-        value: nosniff
-      - path: /*
-        name: Referrer-Policy
-        value: strict-origin-when-cross-origin
-      - path: /*
-        name: X-Frame-Options
-        value: DENY
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: returnly-db
+          property: connectionString
+
+databases:
+  # Render's free Postgres expires after 30 days. Switch to a paid plan before real users rely on it.
+  - name: returnly-db
+    plan: free
+    databaseName: returnly
