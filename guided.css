@@ -41,3 +41,30 @@ button.flow-tab:focus-visible{outline:2px solid #111;outline-offset:2px}
 .pick-grid.single .pick-photo .product-photo{height:270px;max-height:none;aspect-ratio:auto!important}
 @media(max-width:600px){.pick-grid.single .pick-card{padding:20px 14px}.pick-grid.single .pick-photo .product-photo{height:auto;aspect-ratio:3/4!important;max-height:390px}}
 .pick-grid.single .pick-name{margin-top:20px}.pick-grid.single .pick-toggle{margin-top:28px;min-height:50px}
+/* Return and Get paid cards: the Item card's shape, read-only. */
+.plan-grid{margin:8px 0 0;padding:0}
+.plan-card .pick-photo{cursor:default}
+.plan-name{display:block;font-size:16px;font-weight:600;line-height:1.25;margin-top:20px}
+.plan-meta{display:block;font-size:12px;color:#777;margin-top:4px;padding-bottom:14px;border-bottom:1px dashed #bbb}
+.plan-fact{margin-top:14px}
+.plan-fact>small{display:block;font-size:12px;color:#777}
+.plan-fact>b{display:block;font-size:26px;letter-spacing:-.8px;line-height:1.15;margin-top:4px}
+.plan-fact>span{display:block;font-size:13px;color:#555;margin-top:2px}
+.plan-fact .flow-text-link{display:block;margin:10px 0 0}
+.guided-flow .plan-amount{display:block;margin:16px 0 0;font-size:12px;color:#777}
+.plan-input{display:flex;align-items:center;gap:2px;margin-top:4px;border-bottom:1px dashed #bbb;font-size:15px;color:#111}
+.guided-flow .plan-input input{border:0;border-radius:0;padding:6px 0;margin:0;background:none;font-size:15px;width:100%;min-width:0}
+.plan-input:focus-within{border-bottom:1px solid #111}
+.guided-flow .plan-input input:focus{outline:0}
+.pick-grid.single .plan-done{display:flex;align-items:center;justify-content:center;background:#fff;color:#111;margin-bottom:0;cursor:default}
+.plan-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.plan-row>b{font-size:26px;letter-spacing:-.8px;line-height:1.15;margin-top:4px}
+.plan-row>span{font-size:13px;color:#555;white-space:nowrap}
+.plan-split{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.plan-split small{display:block;font-size:12px;color:#777}
+.plan-split b{display:block;font-size:26px;letter-spacing:-.8px;line-height:1.15;margin-top:4px}
+.guided-flow .plan-split .plan-amount{margin:0}
+.plan-split .plan-input{font-size:20px;margin-top:4px}
+.guided-flow .plan-split .plan-input input{font-size:20px;padding:2px 0;color:#111}
+.pick-grid.single .plan-card .pick-photo .product-photo{height:210px}
+@media(max-width:600px){.pick-grid.single .plan-card .pick-photo .product-photo{height:auto;max-height:340px}}
