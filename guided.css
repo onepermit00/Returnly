@@ -34,3 +34,10 @@ button.flow-tab:focus-visible{outline:2px solid #111;outline-offset:2px}
 .flow-done{text-align:center;font-size:14px;font-weight:600;margin:24px 0 0}
 @media(max-width:600px){.flow-tabs{gap:4px;margin-bottom:24px}.flow-tab{font-size:11px}}
 .flow-item-chip .product-photo span{display:none}
+/* A single item card mirrors the scan box: same width, padding, corners and picture size. */
+.pick-grid.single{grid-template-columns:minmax(0,1fr)}
+.pick-grid.single .pick-card{border-radius:20px;padding:24px 20px}
+.pick-grid.single .pick-photo,.pick-grid.single .pick-photo .product-photo{border-radius:14px}
+.pick-grid.single .pick-photo .product-photo{height:270px;max-height:none;aspect-ratio:auto!important}
+@media(max-width:600px){.pick-grid.single .pick-card{padding:20px 14px}.pick-grid.single .pick-photo .product-photo{height:auto;aspect-ratio:3/4!important;max-height:390px}}
+.pick-grid.single .pick-name{margin-top:20px}.pick-grid.single .pick-toggle{margin-top:28px;min-height:50px}
