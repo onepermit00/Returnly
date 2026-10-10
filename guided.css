@@ -80,3 +80,6 @@ button.flow-tab:focus-visible{outline:2px solid #111;outline-offset:2px}
 /* Get paid has three lines instead of two: a slightly shorter photo keeps the card the Item card's size. */
 .pick-grid.single.plan-grid.guided-form .plan-card:has(.plan-line:nth-of-type(3)) .pick-photo .product-photo{height:216px}
 @media(max-width:600px){.pick-grid.single.plan-grid.guided-form .plan-card:has(.plan-line:nth-of-type(3)) .pick-photo .product-photo{height:auto;max-height:334px}}
+/* Easy to notice: the store prompt and Add photo read like the item name. */
+.plan-line input::placeholder{color:#111;font-weight:600;opacity:1}
+.pick-photo-hint{color:#111;font-weight:600}
