@@ -80,7 +80,9 @@ const tabFor = v => v === 'home' ? 'home' : v === 'history-log' ? 'history-log' 
 function syncTabs() {
   let bar = $('#tab-bar');
   if (!bar) {
-    document.body.insertAdjacentHTML('beforeend', `<nav id="tab-bar" class="tab-bar" aria-label="Main">${tabs.map(([v, label, ic]) => `<button type="button" data-tab="${v}" class="${v === 'scan' ? 'tab-scan' : ''}" aria-label="${label}">${homeIcon(tabIcons[ic])}${v === 'scan' ? '' : `<span>${label}</span>`}</button>`).join('')}</nav>`);
+    const tab = ([v, label, ic]) => v === 'scan' ? `<button type="button" data-tab="scan" class="tab-scan" aria-label="Scan">${homeIcon(tabIcons[ic])}</button>` : `<button type="button" data-tab="${v}" aria-label="${label}">${homeIcon(tabIcons[ic])}<span>${label}</span></button>`;
+    // Two panels with a notch between them; the Scan button sits raised in the notch.
+    document.body.insertAdjacentHTML('beforeend', `<nav id="tab-bar" class="tab-bar" aria-label="Main"><div class="tab-side">${tabs.slice(0, 2).map(tab).join('')}</div>${tab(tabs[2])}<div class="tab-side">${tabs.slice(3).map(tab).join('')}</div></nav>`);
     bar = $('#tab-bar');
   }
   const current = tabFor(view);
