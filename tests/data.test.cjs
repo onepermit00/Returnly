@@ -1,3 +1,4 @@
+const crypto = require('node:crypto');
 const test = require('node:test'), assert = require('node:assert/strict'), http = require('node:http'), os = require('node:os'), path = require('node:path'), fs = require('node:fs');
 const { createStore } = require('../server/store');
 const { createApp } = require('../server/app');
@@ -195,16 +196,35 @@ for (const [label, databaseUrl] of STORES) {
       assert.equal(raw.updatedAt, before, 'devices do not need to reload');
 
       const data = (await c('GET', '/api/data')).body.data;
-      assert.equal(data.purchases.length, 3);
+      // The example purchase is dropped; the user's own purchases all move across.
+      assert.equal(data.purchases.length, 2);
+      assert.ok(!data.purchases.some(i => i.demo), 'example purchases are not kept');
       const strip = i => { const { purchaseId, photo, ...rest } = i; return rest; };
-      assert.deepEqual(strip(data.purchases[0]), legacy[0]);
-      assert.deepEqual(strip(data.purchases[1]), strip(legacy[1]));
-      assert.deepEqual(strip(data.purchases[2]), { ...legacy[2], id: '7' });
-      assert.deepEqual((await c('GET', data.purchases[1].photo)).body, Buffer.from(jpeg(4).split(',')[1], 'base64'));
+      assert.deepEqual(strip(data.purchases[0]), strip(legacy[1]));
+      assert.deepEqual(strip(data.purchases[1]), { ...legacy[2], id: '7' });
+      assert.deepEqual((await c('GET', data.purchases[0].photo)).body, Buffer.from(jpeg(4).split(',')[1], 'base64'));
       assert.deepEqual(data.settings, settings);
       assert.equal(data.profile.name, 'Eve');
       assert.match(data.profile.photo, /^\/api\/files\//);
       assert.equal(app.filesOnDisk().length, 2);
+    } finally { await app.close(); }
+  });
+
+  test(`${label}: example purchases are removed and never saved`, async () => {
+    const app = await boot(databaseUrl);
+    try {
+      const c = await app.signUp('Ivy');
+      const user = await app.store.findUserByEmail('ivy@example.com');
+      const own = { id: 'own-1', name: 'Coat', retailer: 'Zara', price: 80, purchased: '2026-10-02', status: 'deciding' };
+      await app.data.saveItem(user.id, own);
+      // An example saved by an earlier version, written straight to the store.
+      await app.store.saveItem(user.id, { id: 'demo-shoes', name: 'The almost-right heels', price: 89, demo: true, purchaseId: crypto.randomUUID() }, {});
+      const data = (await c('GET', '/api/data')).body.data;
+      assert.deepEqual(data.purchases.map(i => i.id), ['own-1']);
+      // An older app sending an example again: accepted without error, not stored.
+      assert.equal((await c('POST', '/api/items', { id: 'demo-bag', name: 'One too many totes', demo: true })).status, 201);
+      assert.equal((await c('PUT', '/api/data', { purchases: [own, { id: 'demo-done', name: 'The extra sweater', demo: true }], settings: {}, profile: {} })).status, 200);
+      assert.deepEqual((await app.data.listItems(user.id)).map(i => i.id), ['own-1']);
     } finally { await app.close(); }
   });
 

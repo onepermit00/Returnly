@@ -37,11 +37,11 @@ function homePage() {
   <p class="home-eyebrow">Still in your return window</p>
   <p class="home-value">${money(s.tracked)}</p>
   <p class="home-sub">Tracked purchase value · USD</p>
-  <dl class="home-stats">
-    <div><dt>Active returns</dt><dd>${s.active}</dd></div>
-    <div><dt>Due within 3 days</dt><dd>${s.dueSoon}</dd></div>
-    <div><dt>Returned</dt><dd>${s.returned}</dd></div>
-  </dl>
+  <div class="home-stats">
+    <p><strong>${s.active}</strong><span>Active returns</span></p><i aria-hidden="true"></i>
+    <p><strong>${s.dueSoon}</strong><span>Due within 3 days</span></p><i aria-hidden="true"></i>
+    <p><strong>${s.returned}</strong><span>Returned</span></p>
+  </div>
 </div>
 <div class="home-grid">
   <div class="home-saved">
