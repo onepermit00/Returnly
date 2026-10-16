@@ -98,3 +98,5 @@ body:not(.flow-active) #main{padding-bottom:110px}
 .vibe-note{font-size:12px;line-height:1.6;color:#777;margin:16px 0 0}
 @media(max-width:650px){.vibe-title{font-size:36px}.vibe-options{padding-left:16px}}
 @media(prefers-reduced-motion:reduce){.vibe-tune summary .vibe-icon:last-child{transition:none}}
+/* Scan in the bottom bar adds purchases, so the header's Add purchase button is gone everywhere. */
+.global-header .add-button{display:none}
