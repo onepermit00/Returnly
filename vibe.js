@@ -34,7 +34,6 @@ const vibeIcon = d => `<svg class="vibe-icon" viewBox="0 0 24 24" fill="none" st
 function vibePage() {
   const v = VibeN.vibeOf(settings.vibe);
   return `<section class="vibe">
-<p class="vibe-eyebrow">Your reminders. Your personality.</p>
 <h1 class="vibe-title">My vibe.</h1>
 <p class="vibe-intro">A different mood? Change your voice whenever you like.</p>
 <h2 class="vibe-label">Choose your voice</h2>
