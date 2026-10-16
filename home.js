@@ -115,6 +115,10 @@ render = function () {
 for (const v of ['overview', 'calendar', 'wallet']) { const n = menuItems.findIndex(m => m[0] === v); if (n >= 0) menuItems.splice(n, 1); }
 menuStats = () => '';
 
+/* Settings opens with the large profile picture (tap to add or change the photo) and no back arrow. */
+const settingsBeforeHome = menuPages.settings;
+menuPages.settings = () => settingsBeforeHome().replace(/<div class="sub-top">[\s\S]*?<\/div>/, `<div class="settings-avatar">${editableAvatar()}</div>`);
+
 /* Open on Home unless the page was asked for something else (e.g. #upload from sign-up). */
 if (view === 'overview' && !location.hash) view = 'home';
 render();
