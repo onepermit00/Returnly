@@ -4,7 +4,6 @@ const renderBeforeHome = render;
 const homeIcons = {
   coins: '<ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v4c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 10v4c0 1.7 3.1 3 7 3s7-1.3 7-3v-4"/><path d="M5 14v4c0 1.7 3.1 3 7 3s7-1.3 7-3v-4"/>',
   bag: '<path d="M6 8h12l-1 12H7z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/>',
-  plus: '<path d="M12 5v14M5 12h14"/>',
   grid: '<rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/>'
 };
 const homeIcon = d => `<svg class="home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
@@ -48,7 +47,6 @@ function homePage() {
     <p class="home-note">Refunds and store credit you've received · USD.${examples ? ' Includes example purchases.' : ''}</p>
   </div>
   <div class="home-windows">
-    <div class="home-windows-head"><h2>Your return windows</h2><button class="home-add" data-add aria-label="Add a purchase">${homeIcon(homeIcons.plus)}</button></div>
     ${list.length ? `<ul class="home-list">${list.map(homeRow).join('')}</ul>` : `<div class="home-empty"><span class="home-empty-icon">${homeIcon(homeIcons.bag)}</span><p><strong>You haven't added any purchases yet.</strong></p><p>Add a purchase to start tracking its return window.</p><button class="primary" data-add>Add purchase</button></div>`}
   </div>
 </div>
