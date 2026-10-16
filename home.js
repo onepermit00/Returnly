@@ -59,8 +59,8 @@ function syncHomeProfile() {
   let b = $('#home-profile');
   if (!b) {
     b = document.createElement('button');
-    b.id = 'home-profile'; b.className = 'flow-profile'; b.dataset.view = 'overview';
-    b.title = 'Open my purchases'; b.setAttribute('aria-label', 'Open my purchases');
+    b.id = 'home-profile'; b.className = 'flow-profile'; b.dataset.view = 'settings';
+    b.title = 'Open my settings'; b.setAttribute('aria-label', 'Open my settings');
     box.append(b);
   }
   b.hidden = view !== 'home';
@@ -75,8 +75,9 @@ const tabIcons = {
   reminders: '<path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>',
   vibe: '<path d="M4 7h10M18 7h2M4 12h4M12 12h8M4 17h12M20 17h0"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="17" r="2"/>'
 };
-const tabs = [['home', 'Home', 'home'], ['history-log', 'History', 'history'], ['scan', 'Scan', 'scan'], ['reminders', 'Reminders', 'reminders'], ['vibe', 'My vibe', 'vibe']];
-const tabFor = v => v === 'home' ? 'home' : v === 'history-log' ? 'history-log' : v === 'reminders' ? 'reminders' : v === 'vibe' ? 'vibe' : '';
+const tabs = [['home', 'Home', 'home'], ['overview', 'History', 'history'], ['scan', 'Scan', 'scan'], ['reminders', 'Reminders', 'reminders'], ['vibe', 'My vibe', 'vibe']];
+// History opens the purchases page (photo grid and its tabs); the menu's History list lights it too.
+const tabFor = v => v === 'home' ? 'home' : ['overview', 'purchases', 'history', 'history-log', 'calendar', 'wallet'].includes(v) ? 'overview' : v === 'reminders' ? 'reminders' : v === 'vibe' ? 'vibe' : '';
 function syncTabs() {
   let bar = $('#tab-bar');
   if (!bar) {
@@ -106,10 +107,10 @@ render = function () {
   syncTabs();
 };
 
-/* The ☰ menu gets a Home entry at the top; Your purchases moves to a grid icon so the two don't share the house. */
-menuIcons.house = menuIcons.home; menuIcons.grid = homeIcons.grid;
-menuItems.unshift(['home', 'Home', 'house']);
-const purchasesItem = menuItems.find(m => m[0] === 'overview'); if (purchasesItem) purchasesItem[2] = 'grid';
+/* The bottom tabs now cover Home, purchases, returns and results, so the ☰ menu keeps only Reminders, History, Settings
+   and Support, without the totals at the top. */
+for (const v of ['overview', 'calendar', 'wallet']) { const n = menuItems.findIndex(m => m[0] === v); if (n >= 0) menuItems.splice(n, 1); }
+menuStats = () => '';
 
 /* Open on Home unless the page was asked for something else (e.g. #upload from sign-up). */
 if (view === 'overview' && !location.hash) view = 'home';
