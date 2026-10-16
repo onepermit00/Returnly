@@ -1,4 +1,4 @@
-/* Home: the first screen after signing in. A photo card with what is still in its return window, money saved so far,
+/* Home: the first screen after signing in, and the bottom tabs on every page. A photo card with what is still in its return window, money saved so far,
    and the open return windows. The profile button (top right) opens the purchases dashboard. */
 const renderBeforeHome = render;
 const homeIcons = {
@@ -67,14 +67,41 @@ function syncHomeProfile() {
   if (!b.hidden) b.innerHTML = avatarInner();
 }
 
+/* Bottom tabs: Home, History, Scan (raised, opens the scanner), Reminders and My vibe (settings). Hidden during the scan steps. */
+const tabIcons = {
+  home: '<path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z"/>',
+  history: '<path d="M3.5 12a8.5 8.5 0 1 0 2.5-6"/><path d="M3.5 4.5V9H8"/><path d="M12 7.5V12l3 2"/>',
+  scan: '<path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2"/><rect x="8" y="7.5" width="8" height="9" rx="1"/><path d="M10 10.5h4M10 13.5h4"/>',
+  reminders: '<path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>',
+  vibe: '<path d="M4 7h10M18 7h2M4 12h4M12 12h8M4 17h12M20 17h0"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="17" r="2"/>'
+};
+const tabs = [['home', 'Home', 'home'], ['history-log', 'History', 'history'], ['scan', 'Scan', 'scan'], ['reminders', 'Reminders', 'reminders'], ['settings', 'My vibe', 'vibe']];
+const tabFor = v => v === 'home' ? 'home' : v === 'history-log' ? 'history-log' : v === 'reminders' ? 'reminders' : ['settings', 'my-profile', 'privacy', 'terms'].includes(v) ? 'settings' : '';
+function syncTabs() {
+  let bar = $('#tab-bar');
+  if (!bar) {
+    document.body.insertAdjacentHTML('beforeend', `<nav id="tab-bar" class="tab-bar" aria-label="Main">${tabs.map(([v, label, ic]) => `<button type="button" data-tab="${v}" class="${v === 'scan' ? 'tab-scan' : ''}" aria-label="${label}">${homeIcon(tabIcons[ic])}${v === 'scan' ? '' : `<span>${label}</span>`}</button>`).join('')}</nav>`);
+    bar = $('#tab-bar');
+  }
+  const current = tabFor(view);
+  bar.querySelectorAll('[data-tab]').forEach(b => { const on = b.dataset.tab === current; b.classList.toggle('active', on); if (on) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-tab]');
+  if (!b) return;
+  if (b.dataset.tab === 'scan') { showAdd(); return; }
+  view = b.dataset.tab; render(); window.scrollTo(0, 0);
+});
+
 render = function () {
-  if (view !== 'home') { document.body.classList.remove('home-active'); renderBeforeHome(); syncHomeProfile(); return; }
+  if (view !== 'home') { document.body.classList.remove('home-active'); renderBeforeHome(); syncHomeProfile(); syncTabs(); return; }
   if (typeof stopJourneyCamera === 'function') stopJourneyCamera();
   document.body.classList.remove('flow-active');
   document.body.classList.add('home-active');
   const fp = $('#flow-profile'); if (fp) fp.hidden = true;
   $('#main').innerHTML = homePage();
   syncHomeProfile();
+  syncTabs();
 };
 
 /* The ☰ menu gets a Home entry at the top; Your purchases moves to a grid icon so the two don't share the house. */
