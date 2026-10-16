@@ -8,11 +8,15 @@
 .home-eyebrow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#ffffffcc}
 .home-value{font-size:48px;font-weight:700;letter-spacing:-.045em;line-height:1;margin-top:14px!important}
 .home-sub{font-size:13px;color:#ffffffb3;margin-top:8px!important}
-.home-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:end;margin-top:auto!important;padding-top:26px;max-width:520px}
-.home-stats>div{display:flex;flex-direction:column-reverse;gap:4px;padding:0 14px;border-left:1px solid #ffffff40}
-.home-stats>div:first-child{padding-left:0;border-left:0}
-.home-stats dt{font-size:12px;color:#ffffffcc;white-space:nowrap}
-.home-stats dd{margin:0;font-size:24px;font-weight:700;letter-spacing:-.03em;line-height:1.1}
+.home-stats{display:flex;justify-content:space-between;align-items:stretch;gap:10px;margin-top:auto!important;padding-top:26px}
+.home-stats p{margin:0;display:flex;flex-direction:column;justify-content:flex-end;gap:4px;min-width:0}
+.home-stats strong{font-size:24px;font-weight:700;letter-spacing:-.03em;line-height:1.1}
+.home-stats span{font-size:12px;color:#ffffffcc;white-space:nowrap}
+.home-stats i{width:1px;background:#ffffff40;flex:none}
+
+
+
+
 .home-grid{display:grid;gap:20px;margin-top:20px}
 .home-saved{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 14px;align-items:start;background:#f7f6f3;border-radius:16px;padding:20px}
 .home-saved-label{font-size:13px;color:#777;margin:0}
@@ -29,16 +33,17 @@
 @media(min-width:900px){
 .home-hero{min-height:280px;padding:34px 40px 30px}
 .home-value{font-size:58px}
+.home-stats{max-width:600px}
 .home-grid{grid-template-columns:minmax(0,1fr) minmax(0,2fr);align-items:start;gap:28px}
 }
 @media(max-width:650px){
 .home{padding-top:4px}
 .home-hero{padding:22px 20px 20px;min-height:220px}
 .home-value{font-size:42px}
-.home-stats{padding-top:22px}
-.home-stats>div{padding:0 8px}
-.home-stats dd{font-size:22px}
-.home-stats dt{font-size:11px}
+.home-stats{padding-top:22px}.home-stats strong{font-size:22px}.home-stats span{font-size:11px}
+
+
+
 .home-saved-value{font-size:28px}
 }
 .home-empty-icon .home-icon{width:26px;height:26px}

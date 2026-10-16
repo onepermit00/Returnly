@@ -69,6 +69,8 @@ function createData({ store, storage, jobs = null }) {
   /* Items. */
   async function saveItem(userId, input, { position = null, touch = true, mustBeNew = false } = {}) {
     if (!input || typeof input !== 'object' || Array.isArray(input) || !validId(input.id)) throw new DataError(400, 'Invalid item.');
+    // Example purchases are no longer kept: only purchases the user added are saved. An older app may still send them.
+    if (input.demo) return { item: input, updatedAt: null, skipped: true };
     if (input.purchaseId !== undefined && !validId(input.purchaseId)) throw new DataError(400, 'Invalid item.');
     const existing = await store.getItem(userId, input.id);
     if (mustBeNew && existing) throw new DataError(409, 'This item already exists.');
@@ -118,7 +120,7 @@ function createData({ store, storage, jobs = null }) {
       // Old payloads may have number ids or none; ids are text from here on.
       item.id = typeof item.id === 'string' && validId(item.id) ? item.id : typeof item.id === 'number' ? String(item.id) : crypto.randomUUID();
       return item;
-    }).reverse().filter(i => !seen.has(i.id) && seen.add(i.id)).reverse();
+    }).filter(i => !i.demo).reverse().filter(i => !seen.has(i.id) && seen.add(i.id)).reverse();
     for (const [position, item] of items.entries()) await saveItem(userId, item, { position, touch: false });
     for (const old of await store.listItems(userId)) if (!seen.has(old.id)) await deleteItem(userId, old.id, { touch: false });
   }
@@ -160,9 +162,18 @@ function createData({ store, storage, jobs = null }) {
     return n;
   }
 
+  /* Removes example purchases saved by earlier versions of the app, so an account shows only the user's own. */
+  async function removeExamples(userId) {
+    let n = 0;
+    for (const i of await store.listItems(userId)) if (i.demo) { await deleteItem(userId, i.id, { touch: false }); n++; }
+    if (n) await store.touch(userId);
+    return n;
+  }
+
   /* The whole account, in the shape /api/data has always returned. null for an account that has never saved anything. */
   async function getData(userId) {
     await migrate(userId);
+    await removeExamples(userId);
     const raw = await store.getRawData(userId);
     const purchases = await store.listItems(userId);
     if (!raw && !purchases.length) return null;
@@ -230,7 +241,7 @@ function createData({ store, storage, jobs = null }) {
     await removeStorage(files.map(f => f.storageKey));
   }
 
-  return { getData, putData, saveItem, deleteItem, setLabel, listItems: userId => store.listItems(userId), putSettings, listPurchases, attachReceipt, receiptPages, saveReceipt, describeReceiptPurchase, cleanupReceipts, readFile, deleteAccount, migrate, migrateAll, removeStorage };
+  return { getData, putData, saveItem, deleteItem, removeExamples, setLabel, listItems: userId => store.listItems(userId), putSettings, listPurchases, attachReceipt, receiptPages, saveReceipt, describeReceiptPurchase, cleanupReceipts, readFile, deleteAccount, migrate, migrateAll, removeStorage };
 }
 
 module.exports = { createData, DataError };
