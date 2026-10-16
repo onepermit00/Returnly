@@ -51,3 +51,15 @@
 .home-saved-value{font-size:28px}
 }
 .home-empty-icon .home-icon{width:26px;height:26px}
+/* Bottom tabs on every app page except the scan steps; the footer is gone, so pages leave room for the bar. */
+.tab-bar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));align-items:end;max-width:640px;margin:0 auto;padding:8px 8px calc(10px + env(safe-area-inset-bottom,0px));background:#fff;border-top:1px solid #eee}
+@media(min-width:641px){.tab-bar{border:1px solid #eee;border-bottom:0;border-radius:16px 16px 0 0}}
+.tab-bar button{display:flex;flex-direction:column;align-items:center;gap:4px;padding:4px 0;border:0;background:none;color:#888;font:inherit;font-size:11px;cursor:pointer}
+.tab-bar button.active{color:#111;font-weight:600}
+.tab-bar [data-tab=home].active .home-icon{fill:#111}
+.tab-bar button:not(.tab-scan) .home-icon{width:24px;height:24px}
+.tab-bar .tab-scan{justify-self:center;width:56px;height:56px;margin-top:-26px;border-radius:18px;background:#111;color:#fff;justify-content:center;box-shadow:0 6px 18px #0002}
+.tab-bar .tab-scan .home-icon{width:26px;height:26px}
+.tab-bar button:focus-visible{outline:2px solid #111;outline-offset:2px}
+body:not(.flow-active) #main{padding-bottom:110px}
+.flow-active .tab-bar{display:none}
