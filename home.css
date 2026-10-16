@@ -68,11 +68,6 @@ body:not(.flow-active) #main{padding-bottom:110px}
 .vibe-eyebrow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#777;margin:0}
 .vibe-title{font-size:40px;font-weight:700;letter-spacing:-.045em;line-height:1.05;margin:10px 0 0}
 .vibe-intro{font-size:14px;line-height:1.6;color:#777;margin:10px 0 0}
-.vibe-sample{background:#111;color:#fff;border-radius:16px;padding:22px 22px 24px;margin:26px 0 0}
-.vibe-sample-tag{display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#ffffffb3;margin:0}
-.vibe-sample-tag .vibe-icon{width:18px;height:18px}
-.vibe-sample-title{font-size:21px;font-weight:700;letter-spacing:-.5px;line-height:1.25;margin:14px 0 0}
-.vibe-sample-body{font-size:14px;line-height:1.6;color:#ffffffd9;margin:10px 0 0}
 .vibe-label{font-size:11px;font-weight:400;letter-spacing:.12em;text-transform:uppercase;color:#777;margin:30px 0 12px}
 .vibe-voices{display:grid;gap:10px}
 .vibe-voice{position:relative;display:grid;grid-template-columns:24px minmax(0,1fr) 22px;gap:14px;align-items:center;padding:15px 16px;border:1px solid #e8e8e8;border-radius:14px;background:#fff;cursor:pointer}
@@ -100,3 +95,5 @@ body:not(.flow-active) #main{padding-bottom:110px}
 @media(prefers-reduced-motion:reduce){.vibe-tune summary .vibe-icon:last-child{transition:none}}
 /* Scan in the bottom bar adds purchases, so the header's Add purchase button is gone everywhere. */
 .global-header .add-button{display:none}
+/* History and Reminders start with their content: no profile circle or "…'s purchases" title at the top. */
+#main .profile-hero{display:none}

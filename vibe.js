@@ -1,5 +1,5 @@
 /* My vibe: choose the voice your return reminders speak in, and fine-tune humor, reminder style and emojis.
-   The sample at the top is the real reminder text (nudge.js), so push, email and the app all say what it shows. */
+   nudge.js applies the choice to every reminder (push, email and the app). */
 const renderBeforeVibe = render;
 const VibeN = ReturnlyNudge;
 let vibeOpenRow = '';
@@ -31,25 +31,12 @@ const vibeTunes = [
 ];
 const vibeIcon = d => `<svg class="vibe-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
 
-/* The reminder your soonest return would get, in your voice; a sample purchase when you have none yet. */
-function vibeSample(vibe) {
-  const t = today();
-  let r = VibeN.compose(items, t, { examples: true, vibe });
-  if (!r) {
-    const sample = { id: 'vibe-sample', name: 'Sneakers', retailer: 'Sample store', price: 150, channel: 'online', purchased: C.shift(t, -27), delivered: '', window: 30, basis: 'purchase', outcome: 'refund', requirement: 'start', confirmed: true, status: 'deciding', next: 'Check the policy and plan your return.' };
-    r = VibeN.compose([sample], t, { examples: true, vibe });
-  }
-  const n = r.days[r.itemId];
-  return { ...r, when: n === 0 ? 'Due today' : n === 1 ? 'Due tomorrow' : `${n} days left` };
-}
-
 function vibePage() {
-  const v = VibeN.vibeOf(settings.vibe), r = vibeSample(v);
+  const v = VibeN.vibeOf(settings.vibe);
   return `<section class="vibe">
 <p class="vibe-eyebrow">Your reminders. Your personality.</p>
 <h1 class="vibe-title">My vibe.</h1>
 <p class="vibe-intro">A different mood? Change your voice whenever you like.</p>
-<div class="vibe-sample" aria-live="polite"><p class="vibe-sample-tag">${vibeIcon(vibeIcons.bell)}Sample reminder · ${esc(r.when)}</p><p class="vibe-sample-title">${esc(r.title)}</p><p class="vibe-sample-body">${esc(r.body)}</p></div>
 <h2 class="vibe-label">Choose your voice</h2>
 <div class="vibe-voices" role="radiogroup" aria-label="Choose your voice">${vibeVoices.map(([id, desc]) => `<label class="vibe-voice${v.voice === id ? ' selected' : ''}"><input type="radio" name="vibe-voice" value="${id}"${v.voice === id ? ' checked' : ''}>${vibeIcon(vibeIcons[id])}<span><strong>${esc(VibeN.VOICES[id].name)}</strong><small>${esc(desc)}</small></span><i class="vibe-radio" aria-hidden="true"></i></label>`).join('')}</div>
 <h2 class="vibe-label">Fine-tune your vibe</h2>
