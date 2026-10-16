@@ -51,16 +51,14 @@
 .home-saved-value{font-size:28px}
 }
 .home-empty-icon .home-icon{width:26px;height:26px}
-/* Bottom tabs on every app page except the scan steps: two panels with a notch, the Scan button raised in the middle. */
-.tab-bar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:minmax(0,1fr) 55px minmax(0,1fr);align-items:start;max-width:640px;margin:0 auto;pointer-events:none}
-.tab-side{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));background:#fff;padding:10px 0 calc(10px + env(safe-area-inset-bottom,0px));box-shadow:0 -4px 18px rgba(0,0,0,.06);pointer-events:auto}
-.tab-side:first-child{border-radius:20px 16px 0 0}
-.tab-side:last-child{border-radius:16px 20px 0 0}
+/* Bottom tabs on every app page except the scan steps: one bar whose top dips into a pocket, with the Scan button resting in it. */
+.tab-bar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(2,minmax(0,1fr)) 55px repeat(2,minmax(0,1fr));align-items:start;max-width:640px;margin:0 auto;padding:10px 0 calc(10px + env(safe-area-inset-bottom,0px));filter:drop-shadow(0 -3px 10px rgba(0,0,0,.07))}
+.tab-surface{position:absolute;inset:0;z-index:-1;background:#fff;border-radius:20px 20px 0 0;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 87 34'%3E%3Cpath d='M0 0H87C79 0 71 2 71 16V18C71 30 63 34 55 34H32C24 34 16 30 16 18V16C16 2 8 0 0 0Z'/%3E%3C/svg%3E") center top/87px 34px no-repeat,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 87 34'%3E%3Cpath d='M0 0H87C79 0 71 2 71 16V18C71 30 63 34 55 34H32C24 34 16 30 16 18V16C16 2 8 0 0 0Z'/%3E%3C/svg%3E") center top/87px 34px no-repeat exclude,linear-gradient(#000 0 0)}
 .tab-bar button{display:flex;flex-direction:column;align-items:center;gap:5px;padding:0;border:0;background:none;color:#6f6d6b;font:inherit;font-size:9.5px;cursor:pointer}
 .tab-bar button.active{color:#111}
 .tab-bar [data-tab=home].active .home-icon{fill:#111}
-.tab-side .home-icon{width:25px;height:25px;stroke-width:1.8}
-.tab-bar .tab-scan{justify-self:center;width:48px;height:48px;margin-top:-15px;border-radius:16px;background:#151614;color:#fff;justify-content:center;box-shadow:0 6px 16px rgba(0,0,0,.18);pointer-events:auto}
+.tab-bar button:not(.tab-scan) .home-icon{width:25px;height:25px;stroke-width:1.8}
+.tab-bar .tab-scan{justify-self:center;width:48px;height:48px;margin-top:-24px;border-radius:16px;background:#151614;color:#fff;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,.16)}
 .tab-bar .tab-scan .home-icon{width:24px;height:24px}
 .tab-bar button:focus-visible{outline:2px solid #111;outline-offset:2px}
 body:not(.flow-active) #main{padding-bottom:110px}

@@ -81,8 +81,8 @@ function syncTabs() {
   let bar = $('#tab-bar');
   if (!bar) {
     const tab = ([v, label, ic]) => v === 'scan' ? `<button type="button" data-tab="scan" class="tab-scan" aria-label="Scan">${homeIcon(tabIcons[ic])}</button>` : `<button type="button" data-tab="${v}" aria-label="${label}">${homeIcon(tabIcons[ic])}<span>${label}</span></button>`;
-    // Two panels with a notch between them; the Scan button sits raised in the notch.
-    document.body.insertAdjacentHTML('beforeend', `<nav id="tab-bar" class="tab-bar" aria-label="Main"><div class="tab-side">${tabs.slice(0, 2).map(tab).join('')}</div>${tab(tabs[2])}<div class="tab-side">${tabs.slice(3).map(tab).join('')}</div></nav>`);
+    // One bar whose top edge dips into a pocket in the middle; the Scan button rests in the pocket.
+    document.body.insertAdjacentHTML('beforeend', `<nav id="tab-bar" class="tab-bar" aria-label="Main"><span class="tab-surface" aria-hidden="true"></span>${tabs.map(tab).join('')}</nav>`);
     bar = $('#tab-bar');
   }
   const current = tabFor(view);
