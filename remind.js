@@ -16,7 +16,7 @@ if(Account.user())Account.api('GET','/api/email/prefs').then(p=>{emailPrefs=p;if
 function reminderExtraRows(){const emailOn=emailPrefs.available&&(emailPrefs.daily||emailPrefs.unopened);return `<form id="reminder-extra-form"><label class="check-label"><input type="checkbox" name="email" ${emailOn?'checked':''} ${emailPrefs.available?'':'disabled'}> Also email me${emailPrefs.available?'':' (email isn’t set up yet)'}</label><label>Quiet hours from <input type="time" name="quietStart" value="${esc(validClock(settings.quietStart)?settings.quietStart:'')}"></label><label>Quiet hours until <input type="time" name="quietEnd" value="${esc(validClock(settings.quietEnd)?settings.quietEnd:'')}"></label><label class="check-label"><input type="checkbox" name="gentle" ${settings.gentle?'checked':''}> Gentle: only at the halfway point and 7, 3 and 1 days before</label></form>`}
 remindersPage=function(){const el=document.createElement('div');el.innerHTML=remindersPageBeforeNudge();
   // The preview card keeps its layout and shows the reminder the user would get today (examples included while exploring).
-  const r=N.compose(items,today(),{gentle:!!settings.gentle,examples:true}),pv=el.querySelector('.notification-preview');
+  const r=N.compose(items,today(),{gentle:!!settings.gentle,examples:true,vibe:settings.vibe}),pv=el.querySelector('.notification-preview');
   if(pv&&r){pv.querySelector('strong').textContent=r.title;pv.querySelector('p').textContent=r.body;pv.querySelector('.preview-brand span:last-child').textContent=sendClock()}
   const card=el.querySelector('.settings-card');if(card)card.insertAdjacentHTML('beforeend',reminderExtraRows());return el.innerHTML};
 

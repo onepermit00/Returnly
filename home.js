@@ -67,7 +67,7 @@ function syncHomeProfile() {
   if (!b.hidden) b.innerHTML = avatarInner();
 }
 
-/* Bottom tabs: Home, History, Scan (raised, opens the scanner), Reminders and My vibe (settings). Hidden during the scan steps. */
+/* Bottom tabs: Home, History, Scan (raised, opens the scanner), Reminders and My vibe (reminder voice). Hidden during the scan steps. */
 const tabIcons = {
   home: '<path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z"/>',
   history: '<path d="M3.5 12a8.5 8.5 0 1 0 2.5-6"/><path d="M3.5 4.5V9H8"/><path d="M12 7.5V12l3 2"/>',
@@ -75,8 +75,8 @@ const tabIcons = {
   reminders: '<path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>',
   vibe: '<path d="M4 7h10M18 7h2M4 12h4M12 12h8M4 17h12M20 17h0"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="17" r="2"/>'
 };
-const tabs = [['home', 'Home', 'home'], ['history-log', 'History', 'history'], ['scan', 'Scan', 'scan'], ['reminders', 'Reminders', 'reminders'], ['settings', 'My vibe', 'vibe']];
-const tabFor = v => v === 'home' ? 'home' : v === 'history-log' ? 'history-log' : v === 'reminders' ? 'reminders' : ['settings', 'my-profile', 'privacy', 'terms'].includes(v) ? 'settings' : '';
+const tabs = [['home', 'Home', 'home'], ['history-log', 'History', 'history'], ['scan', 'Scan', 'scan'], ['reminders', 'Reminders', 'reminders'], ['vibe', 'My vibe', 'vibe']];
+const tabFor = v => v === 'home' ? 'home' : v === 'history-log' ? 'history-log' : v === 'reminders' ? 'reminders' : v === 'vibe' ? 'vibe' : '';
 function syncTabs() {
   let bar = $('#tab-bar');
   if (!bar) {

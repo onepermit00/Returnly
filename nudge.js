@@ -94,9 +94,52 @@ function dropoffLine(i, n, today) {
   return d ? `Nearest drop-off: ${name}, ${d.miles} mi.` : '';
 }
 
+/* My vibe: the voice a reminder speaks in. The facts (item, money, days left, next step, drop-off) never change; the voice
+   sets the headline and adds an opening line, Humor picks the plain or playful line, Reminder style adds a closing line,
+   and Emojis adds none, one or a few. Straight Shooter with no extras is the original wording. */
+const VOICES = {
+  bestie: { name: 'Sassy Bestie', emoji: ['⏳', '💅'],
+    title: { daily: 'A little nudge, bestie', soon: 'Bestie, the clock is ticking', tomorrow: 'Bestie. Tomorrow.', today: 'Bestie, it’s deadline day' },
+    plain: 'Don’t let this one slip, bestie.', playful: 'We are not paying for things we don’t love.' },
+  bro: { name: 'The Bro', emoji: ['👊', '🔥'],
+    title: { daily: 'Yo, quick one', soon: 'Bro, clock’s ticking', tomorrow: 'Bro. Tomorrow.', today: 'Bro. Today’s the day.' },
+    plain: 'Let’s knock this out.', playful: 'Your closet called. It wants its space back.' },
+  straight: { name: 'Straight Shooter', emoji: ['📌', '⏰'], title: null, plain: '', playful: '' },
+  comedian: { name: 'The Comedian', emoji: ['😅', '🎭'],
+    title: { daily: 'Plot twist: a deadline', soon: 'Plot twist: the deadline is close', tomorrow: 'Spoiler: it’s due tomorrow', today: 'Breaking news: it’s deadline day' },
+    plain: 'Time to sort this one.', playful: 'This return window is closing faster than your group chat moves on.' },
+  supportive: { name: 'Supportive Friend', emoji: ['💛', '🌱'],
+    title: { daily: 'You’ve got this', soon: 'A gentle heads-up', tomorrow: 'Almost there, one more day', today: 'Today’s the day, and you’ve got this' },
+    plain: 'One small step today is all it takes.', playful: 'Future you is already saying thank you.' },
+  assistant: { name: 'Personal Assistant', emoji: ['📋', '🗓️'],
+    title: { daily: 'Return reminder', soon: 'Return due soon', tomorrow: 'Return due tomorrow', today: 'Action needed today' },
+    plain: 'A quick update on your return.', playful: 'A quick update on your return, handled.' }
+};
+const VIBE_DEFAULTS = { voice: 'straight', humor: 'little', style: 'firm', emoji: 'none' };
+function vibeOf(v) {
+  const o = { ...VIBE_DEFAULTS, ...(v && typeof v === 'object' ? v : {}) };
+  if (!VOICES[o.voice]) o.voice = VIBE_DEFAULTS.voice;
+  if (!['none', 'little', 'lots'].includes(o.humor)) o.humor = VIBE_DEFAULTS.humor;
+  if (!['gentle', 'firm', 'direct'].includes(o.style)) o.style = VIBE_DEFAULTS.style;
+  if (!['none', 'few', 'lots'].includes(o.emoji)) o.emoji = VIBE_DEFAULTS.emoji;
+  return o;
+}
+function voiced(r, vibe, n) {
+  const v = vibeOf(vibe), voice = VOICES[v.voice];
+  if (v.voice === 'straight' && v.style === 'firm' && v.emoji === 'none') return r;
+  const single = !/returns due this week/.test(r.title);
+  let title = voice.title && single ? voice.title[r.stage] : r.title;
+  const open = !voice.plain ? '' : v.humor === 'none' ? voice.plain : v.humor === 'lots' ? voice.plain + ' ' + voice.playful : (v.voice === 'comedian' ? voice.playful : voice.plain);
+  const close = v.style === 'gentle' ? 'No pressure, just a heads-up.' : v.style === 'firm' && n <= 3 && v.voice !== 'straight' ? 'Don’t leave this one for later.' : '';
+  if (v.emoji !== 'none') title += ' ' + voice.emoji[0];
+  let body = [open, r.body, close].filter(Boolean).join(' ');
+  if (v.emoji === 'lots') body += ' ' + voice.emoji[1];
+  return { ...r, title, body };
+}
+
 /* The day's reminder for these items on `today` (the user's local date), or null when nothing needs one.
-   options: gentle (only on gentle days), examples (include example items, for the preview). */
-function compose(items, today, { gentle = false, examples = false } = {}) {
+   options: gentle (only on gentle days), examples (include example items, for the preview), vibe (My vibe settings). */
+function compose(items, today, { gentle = false, examples = false, vibe = null } = {}) {
   let list = due(items, today, { examples });
   if (gentle) list = list.filter(i => gentleDay(i, today));
   if (!list.length) return null;
@@ -121,9 +164,9 @@ function compose(items, today, { gentle = false, examples = false } = {}) {
     { action: 'sent', title: 'I sent it back' },
     { action: 'keep', title: 'I’m keeping it' }
   ];
-  return { title, body: parts.join(' '), itemId: first.id, url, stage, items: list.map(i => i.id), days: Object.fromEntries(list.map(i => [i.id, C.days(C.due(i), today)])), actions };
+  return voiced({ title, body: parts.join(' '), itemId: first.id, url, stage, items: list.map(i => i.id), days: Object.fromEntries(list.map(i => [i.id, C.days(C.due(i), today)])), actions }, vibe, n);
 }
 
-const api = { compose, due, gentleDay, nextStep, stake, closesToday, daysLabel, money };
+const api = { compose, due, gentleDay, nextStep, stake, closesToday, daysLabel, money, VOICES, VIBE_DEFAULTS, vibeOf };
 if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.ReturnlyNudge = api;
 })(typeof window !== 'undefined' ? window : globalThis);
