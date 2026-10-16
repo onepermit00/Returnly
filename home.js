@@ -1,5 +1,5 @@
 /* Home: the first screen after signing in, and the bottom tabs on every page. A photo card with what is still in its return window, money saved so far,
-   and the open return windows. The profile button (top right) opens the purchases dashboard. */
+   and a card to add a purchase. The profile button (top right) opens the purchases dashboard. */
 const renderBeforeHome = render;
 const homeIcons = {
   coins: '<ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v4c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 10v4c0 1.7 3.1 3 7 3s7-1.3 7-3v-4"/><path d="M5 14v4c0 1.7 3.1 3 7 3s7-1.3 7-3v-4"/>',
@@ -22,13 +22,16 @@ function homeStats() {
   };
 }
 
-function homeRow(i) {
-  const d = C.days(C.due(i), today()), soon = d !== null && d >= 0 && d <= 3;
-  return `<li><button class="home-row" data-open="${esc(i.id)}">${photo(i)}<span class="home-row-text"><strong>${esc(i.name)}</strong><small>${esc(i.retailer)} · ${money(i.price)}${i.demo ? ' · Example' : ''}</small></span><em class="home-due${soon ? ' soon' : ''}">${esc(daysLabel(i))}</em></button></li>`;
+/* In place of a purchase list: the add-a-purchase card. Example purchases don't count as yours. */
+function homeAddCard() {
+  const n = items.filter(i => !i.demo).length;
+  const head = n ? `You're tracking ${n} purchase${n === 1 ? '' : 's'}.` : "You haven't added any purchases yet.";
+  const sub = n ? 'Add another purchase to track its return window.' : 'Add a purchase to start tracking its return window.';
+  return `<div class="home-empty"><span class="home-empty-icon">${homeIcon(homeIcons.bag)}</span><p><strong>${head}</strong></p><p>${sub}</p><button class="primary" data-add>Add purchase</button></div>`;
 }
 
 function homePage() {
-  const s = homeStats(), list = homeWindows(), examples = items.some(i => i.demo);
+  const s = homeStats(), examples = items.some(i => i.demo);
   return `<section class="home">
 <div class="home-hero">
   <p class="home-eyebrow">Still in your return window</p>
@@ -47,7 +50,7 @@ function homePage() {
     <p class="home-note">Refunds and store credit you've received · USD.${examples ? ' Includes example purchases.' : ''}</p>
   </div>
   <div class="home-windows">
-    ${list.length ? `<ul class="home-list">${list.map(homeRow).join('')}</ul>` : `<div class="home-empty"><span class="home-empty-icon">${homeIcon(homeIcons.bag)}</span><p><strong>You haven't added any purchases yet.</strong></p><p>Add a purchase to start tracking its return window.</p><button class="primary" data-add>Add purchase</button></div>`}
+    ${homeAddCard()}
   </div>
 </div>
 </section>`;
