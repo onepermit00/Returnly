@@ -93,3 +93,9 @@ body:not(.flow-active) #main{padding-bottom:124px}
 .global-header .add-button{display:none}
 /* History and Reminders start with their content: no profile circle or "…'s purchases" title at the top. */
 #main .profile-hero{display:none}
+/* Settings: the large profile picture above the title. */
+.settings-avatar{display:flex;justify-content:center;padding:28px 0 4px}
+.settings-avatar .profile-avatar{margin:0 auto}
+.settings-avatar .profile-circle{width:104px;height:104px;font-size:34px;overflow:hidden;padding:0}
+.settings-avatar+.sub-title{text-align:center;margin-top:18px}
+@media(max-width:650px){.settings-avatar .profile-circle{width:96px;height:96px;font-size:31px}}
