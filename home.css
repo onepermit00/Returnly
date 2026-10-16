@@ -99,3 +99,5 @@ body:not(.flow-active) #main{padding-bottom:124px}
 .settings-avatar .profile-circle{width:104px;height:104px;font-size:34px;overflow:hidden;padding:0}
 .settings-avatar+.sub-title{text-align:center;margin-top:18px}
 @media(max-width:650px){.settings-avatar .profile-circle{width:96px;height:96px;font-size:31px}}
+/* Reminders: its heading sits at the same height as My vibe's. */
+#main .page-heading:has(+ .two-panel){margin-top:22px}
