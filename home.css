@@ -21,15 +21,6 @@
 .home-saved-icon{width:48px;height:48px}
 .home-note{grid-column:1/-1;font-size:12px;line-height:1.6;color:#777;margin:4px 0 0}
 .home-icon{width:22px;height:22px}
-.home-row:focus-visible{outline:2px solid #111;outline-offset:2px}
-.home-list{list-style:none;margin:0;padding:0;border-top:1px solid #eee}
-.home-row{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:14px;align-items:center;width:100%;padding:12px 0;border:0;border-bottom:1px solid #eee;background:none;text-align:left;cursor:pointer;font-family:inherit;color:#111}
-.home-row .product-photo{width:56px;height:68px;aspect-ratio:auto!important;border-radius:8px}
-.home-row-text{min-width:0}
-.home-row strong{display:block;font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.home-row small{display:block;font-size:12px;color:#777;margin-top:3px}
-.home-due{font-style:normal;font-size:11px;white-space:nowrap;background:#f1ede7;border-radius:20px;padding:5px 10px}
-.home-due.soon{background:#111;color:#fff}
 .home-empty{text-align:center;background:#f7f6f3;border-radius:16px;padding:28px 20px}
 .home-empty-icon{width:56px;height:56px;margin:0 auto 14px}
 .home-empty p{font-size:13px;color:#777;margin:0 0 4px}
@@ -52,16 +43,16 @@
 }
 .home-empty-icon .home-icon{width:26px;height:26px}
 /* Bottom tabs on every app page except the scan steps: one bar whose top dips into a pocket, with the Scan button resting in it. */
-.tab-bar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(2,minmax(0,1fr)) 55px repeat(2,minmax(0,1fr));align-items:start;max-width:640px;margin:0 auto;padding:10px 0 calc(10px + env(safe-area-inset-bottom,0px));filter:drop-shadow(0 -3px 10px rgba(0,0,0,.07))}
-.tab-surface{position:absolute;inset:0;z-index:-1;background:#fff;border-radius:20px 20px 0 0;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 87 34'%3E%3Cpath d='M0 0H87C79 0 71 2 71 16V18C71 30 63 34 55 34H32C24 34 16 30 16 18V16C16 2 8 0 0 0Z'/%3E%3C/svg%3E") center top/87px 34px no-repeat,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 87 34'%3E%3Cpath d='M0 0H87C79 0 71 2 71 16V18C71 30 63 34 55 34H32C24 34 16 30 16 18V16C16 2 8 0 0 0Z'/%3E%3C/svg%3E") center top/87px 34px no-repeat exclude,linear-gradient(#000 0 0)}
-.tab-bar button{display:flex;flex-direction:column;align-items:center;gap:5px;padding:0;border:0;background:none;color:#6f6d6b;font:inherit;font-size:9.5px;cursor:pointer}
+.tab-bar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(2,minmax(0,1fr)) 64px repeat(2,minmax(0,1fr));align-items:start;max-width:640px;margin:0 auto;padding:12px 0 calc(12px + env(safe-area-inset-bottom,0px));filter:drop-shadow(0 -3px 10px rgba(0,0,0,.07))}
+.tab-surface{position:absolute;inset:0;z-index:-1;background:#fff;border-radius:20px 20px 0 0;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 98 38'%3E%3Cpath d='M0 0H98C89 0 80 2 80 18V20C80 33 71 38 62 38H36C27 38 18 33 18 20V18C18 2 9 0 0 0Z'/%3E%3C/svg%3E") center top/98px 38px no-repeat,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 98 38'%3E%3Cpath d='M0 0H98C89 0 80 2 80 18V20C80 33 71 38 62 38H36C27 38 18 33 18 20V18C18 2 9 0 0 0Z'/%3E%3C/svg%3E") center top/98px 38px no-repeat exclude,linear-gradient(#000 0 0)}
+.tab-bar button{display:flex;flex-direction:column;align-items:center;gap:5px;padding:0;border:0;background:none;color:#6f6d6b;font:inherit;font-size:11.5px;cursor:pointer}
 .tab-bar button.active{color:#111}
 .tab-bar [data-tab=home].active .home-icon{fill:#111}
-.tab-bar button:not(.tab-scan) .home-icon{width:25px;height:25px;stroke-width:1.8}
-.tab-bar .tab-scan{justify-self:center;width:48px;height:48px;margin-top:-24px;border-radius:16px;background:#151614;color:#fff;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,.16)}
-.tab-bar .tab-scan .home-icon{width:24px;height:24px}
+.tab-bar button:not(.tab-scan) .home-icon{width:28px;height:28px;stroke-width:1.8}
+.tab-bar .tab-scan{justify-self:center;width:56px;height:56px;margin-top:-30px;border-radius:18px;background:#151614;color:#fff;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,.16)}
+.tab-bar .tab-scan .home-icon{width:28px;height:28px}
 .tab-bar button:focus-visible{outline:2px solid #111;outline-offset:2px}
-body:not(.flow-active) #main{padding-bottom:110px}
+body:not(.flow-active) #main{padding-bottom:124px}
 .flow-active .tab-bar{display:none}
 /* My vibe: the reminder voice. Same type, black, light greys and rounded cards as the rest of the app. */
 .vibe{max-width:640px;margin:0 auto;padding:12px 0 40px}
