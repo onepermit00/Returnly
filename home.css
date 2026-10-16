@@ -63,3 +63,38 @@
 .tab-bar button:focus-visible{outline:2px solid #111;outline-offset:2px}
 body:not(.flow-active) #main{padding-bottom:110px}
 .flow-active .tab-bar{display:none}
+/* My vibe: the reminder voice. Same type, black, light greys and rounded cards as the rest of the app. */
+.vibe{max-width:640px;margin:0 auto;padding:12px 0 40px}
+.vibe-eyebrow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#777;margin:0}
+.vibe-title{font-size:40px;font-weight:700;letter-spacing:-.045em;line-height:1.05;margin:10px 0 0}
+.vibe-intro{font-size:14px;line-height:1.6;color:#777;margin:10px 0 0}
+.vibe-sample{background:#111;color:#fff;border-radius:16px;padding:22px 22px 24px;margin:26px 0 0}
+.vibe-sample-tag{display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#ffffffb3;margin:0}
+.vibe-sample-tag .vibe-icon{width:18px;height:18px}
+.vibe-sample-title{font-size:21px;font-weight:700;letter-spacing:-.5px;line-height:1.25;margin:14px 0 0}
+.vibe-sample-body{font-size:14px;line-height:1.6;color:#ffffffd9;margin:10px 0 0}
+.vibe-label{font-size:11px;font-weight:400;letter-spacing:.12em;text-transform:uppercase;color:#777;margin:30px 0 12px}
+.vibe-voices{display:grid;gap:10px}
+.vibe-voice{position:relative;display:grid;grid-template-columns:24px minmax(0,1fr) 22px;gap:14px;align-items:center;padding:15px 16px;border:1px solid #e8e8e8;border-radius:14px;background:#fff;cursor:pointer}
+.vibe-voice input,.vibe-options input{position:absolute;left:0;top:0;width:1px!important;height:1px;margin:0;padding:0;border:0;opacity:0;pointer-events:none}
+.vibe-voice .vibe-icon{width:24px;height:24px;color:#555}
+.vibe-voice strong,.vibe-tune strong{display:block;font-size:15px;font-weight:600;color:#111}
+.vibe-voice small,.vibe-tune small{display:block;font-size:13px;color:#777;margin-top:3px}
+.vibe-radio{width:22px;height:22px;border-radius:50%;border:1.5px solid #ccc;box-sizing:border-box}
+.vibe-voice.selected{border:1.5px solid #111;background:#f7f6f3}
+.vibe-voice.selected .vibe-icon{color:#111}
+.vibe-voice.selected .vibe-radio{border:6px solid #111}
+.vibe-voice:has(input:focus-visible),.vibe-options label:has(input:focus-visible),.vibe-tune summary:focus-visible{outline:2px solid #111;outline-offset:2px}
+.vibe-tunes{border:1px solid #e8e8e8;border-radius:14px;background:#fff;overflow:hidden}
+.vibe-tune+.vibe-tune{border-top:1px solid #eee}
+.vibe-tune summary{display:grid;grid-template-columns:24px minmax(0,1fr) 20px;gap:14px;align-items:center;padding:16px;cursor:pointer;list-style:none}
+.vibe-tune summary::-webkit-details-marker{display:none}
+.vibe-tune summary .vibe-icon{width:24px;height:24px;color:#555}
+.vibe-tune summary .vibe-icon:last-child{width:20px;height:20px;color:#999;transition:transform .15s}
+.vibe-tune[open] summary .vibe-icon:last-child{transform:rotate(90deg)}
+.vibe-options{display:flex;flex-wrap:wrap;gap:8px;padding:0 16px 16px 54px}
+.vibe-options label{position:relative;padding:9px 14px;border:1px solid #ddd;border-radius:30px;font-size:13px;color:#111;cursor:pointer;background:#fff}
+.vibe-options label.selected{background:#111;border-color:#111;color:#fff}
+.vibe-note{font-size:12px;line-height:1.6;color:#777;margin:16px 0 0}
+@media(max-width:650px){.vibe-title{font-size:36px}.vibe-options{padding-left:16px}}
+@media(prefers-reduced-motion:reduce){.vibe-tune summary .vibe-icon:last-child{transition:none}}

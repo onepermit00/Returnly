@@ -72,3 +72,37 @@ test('examples are left out unless asked for (the Reminders preview)', () => {
   assert.equal(N.compose([item('A', 5, { demo: true })], today), null);
   assert.equal(N.compose([item('A', 5, { demo: true })], today, { examples: true }).itemId, 'A');
 });
+
+test('My vibe: no choice or Straight Shooter keeps the original words', () => {
+  const plain = N.compose([item('Boots', 3)], today);
+  assert.deepEqual(N.compose([item('Boots', 3)], today, { vibe: { voice: 'straight' } }), plain);
+  assert.deepEqual(N.compose([item('Boots', 3)], today, { vibe: { voice: 'nonsense', emoji: 'loads' } }), plain);
+});
+
+test('My vibe: the voice sets the headline and opening line but keeps every fact', () => {
+  const plain = N.compose([item('Boots', 3)], today);
+  const r = N.compose([item('Boots', 3)], today, { vibe: { voice: 'bestie' } });
+  assert.equal(r.title, 'Bestie, the clock is ticking');
+  assert.ok(r.body.startsWith('Don’t let this one slip, bestie. '));
+  assert.ok(r.body.includes(plain.body));
+  assert.equal(r.itemId, plain.itemId);
+  assert.deepEqual(r.actions, plain.actions);
+});
+
+test('My vibe: humor, reminder style and emojis', () => {
+  const r = (vibe, left = 3) => N.compose([item('Boots', left)], today, { vibe });
+  assert.ok(r({ voice: 'bro', humor: 'lots' }).body.includes('Your closet called.'));
+  assert.ok(!r({ voice: 'bro', humor: 'none' }).body.includes('Your closet called.'));
+  assert.ok(r({ voice: 'supportive', style: 'gentle' }).body.endsWith('No pressure, just a heads-up.'));
+  assert.ok(r({ voice: 'supportive', style: 'firm' }, 3).body.endsWith('Don’t leave this one for later.'));
+  assert.ok(!r({ voice: 'supportive', style: 'firm' }, 12).body.includes('Don’t leave this one for later.'));
+  assert.ok(!r({ voice: 'assistant', style: 'direct' }).body.includes('later'));
+  assert.equal(r({ voice: 'bestie', emoji: 'none' }).title, 'Bestie, the clock is ticking');
+  assert.equal(r({ voice: 'bestie', emoji: 'few' }).title, 'Bestie, the clock is ticking ⏳');
+  assert.ok(r({ voice: 'bestie', emoji: 'lots' }).body.endsWith('💅'));
+});
+
+test('My vibe: a weekly group keeps its total as the headline', () => {
+  const r = N.compose([item('Dress', 4, { price: 49 }), item('Boots', 6, { price: 35 })], today, { vibe: { voice: 'bro' } });
+  assert.match(r.title, /^2 returns due this week/);
+});

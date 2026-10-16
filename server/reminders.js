@@ -17,7 +17,7 @@ const notification = r => ({ title: r.title, body: r.body, itemId: r.itemId, url
 
 /* The day's reminder for these items on `today` (the user's local date), or null when nothing needs one. */
 function pick(items, today, settings = {}) {
-  return N.compose(items, today, { gentle: !!(settings && settings.gentle) });
+  return N.compose(items, today, { gentle: !!(settings && settings.gentle), vibe: settings && settings.vibe });
 }
 
 const validTimeZone = tz => { if (typeof tz !== 'string' || !tz || tz.length > 64) return false; try { new Intl.DateTimeFormat('en-US', { timeZone: tz }); return true; } catch { return false; } };
