@@ -65,11 +65,12 @@ function stFocus(t) {
 }
 
 function stHomeEmpty() {
+  if (typeof inbox !== 'undefined' && !inbox.state && typeof loadInbox === 'function') setTimeout(async () => { await loadInbox(); if (view === 'home' && !items.length) render(); });
   return `<div class="st-fan" aria-hidden="true"><span></span><span></span><span><b>30 days</b></span></div>
 <div class="st-center"><h2 class="st-d1">Your first return <em>starts here.</em></h2><p class="st-m">Add one purchase. We’ll find its return window and remind you before it closes.</p></div>
 <div class="st-list">
   <button class="st-li" data-add><span class="st-circ flat">${ic('i-scan')}</span><span class="st-grow">Scan a receipt<small>Paper, screenshot or PDF</small></span>${ic('i-chev', 'chev')}</button>
-  <button class="st-li" data-menu-go="email-import"><span class="st-circ flat">${ic('i-mail')}</span><span class="st-grow">Forward an order email<small>We’ll add it to History for you</small></span>${ic('i-chev', 'chev')}</button>
+  <button class="st-li" data-menu-go="email-import"><span class="st-circ flat">${ic('i-mail')}</span><span class="st-grow">Forward an order email<small>${typeof inbox !== 'undefined' && inbox.data && inbox.data.address && inbox.data.available.forwarding ? esc(inbox.data.address) : 'We’ll add it to History for you'}</small></span>${ic('i-chev', 'chev')}</button>
   <button class="st-li" data-add><span class="st-circ flat">${ic('i-edit')}</span><span class="st-grow">Add it by hand<small>Store, price and date</small></span>${ic('i-chev', 'chev')}</button>
 </div>`;
 }
@@ -86,7 +87,7 @@ function stHome() {
   const rest = open.filter(i => i !== top).slice(0, 8);
   const date = new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
   const head = `<header class="st-head st-homehead"><button class="st-me" data-view="settings" aria-label="Open my settings"><span class="st-ava">${avatarInner()}</span><span class="st-hi"><span class="st-k">${esc(date)}</span><b>Hi${stName() ? ', ' + esc(stName()) : ' there'}</b></span></button><div class="st-r">${stCirc('i-search', 'data-view="overview"', 'Search purchases')}${stCirc('i-bell', 'data-view="alerts"', 'Alerts', typeof stAlertsNew === 'function' ? stAlertsNew() : week > 0)}</div></header>`;
-  if (!mine && !items.length) return `<section class="st st-home">${head}${stHomeEmpty()}</section>`;
+  if (!mine && !items.length) return `<section class="st st-home"><header class="st-head st-homehead"><span class="st-wm">Returnly.</span><button class="st-ava" data-view="settings" aria-label="Open my settings">${avatarInner()}</button></header>${stHomeEmpty()}</section>`;
   const missed = items.filter(i => i.intent === 'return' && !['started', 'shipped', 'received', 'kept'].includes(i.status) && stDays(i) !== null && stDays(i) < 0).length;
   const done = items.filter(i => ['shipped', 'received'].includes(i.status)).length;
   return `<section class="st st-home">${head}
@@ -99,35 +100,40 @@ ${done ? `<article class="st-card st-streak"><div class="st-sb"><span class="st-
 }
 
 /* ---------- Purchases (History tab) ---------- */
+let stChipF = '';
+const ST_CHIPS = [['soon', 'Due soon', i => stOpen(i) && stDays(i) !== null && stDays(i) <= 7], ['refund', 'Money back', i => i.outcome === 'refund'], ['credit', 'Store credit', i => i.outcome === 'credit'], ['store', 'In store', i => i.channel === 'store'], ['online', 'Online', i => i.channel !== 'store']];
+/* Due this week first, then purchases still missing a return window, then everything else by the month it was bought. */
 function stGroups(list) {
-  const g = { week: [], later: [], moving: [], done: [] };
+  const week = [], date = [], rest = [];
   for (const i of list) {
-    const n = stDays(i);
-    if (['started', 'shipped'].includes(i.status)) g.moving.push(i);
-    else if (['received', 'kept'].includes(i.status) || i.outcome === 'final' || (n !== null && n < 0)) g.done.push(i);
-    else if (n !== null && n <= 7) g.week.push(i);
-    else g.later.push(i);
+    const n = stDays(i), open = !['started', 'shipped', 'received', 'kept'].includes(i.status) && i.outcome !== 'final';
+    if (open && n !== null && n >= 0 && n <= 7) week.push(i);
+    else if (open && n === null) date.push(i);
+    else rest.push(i);
   }
-  g.week = sorted(g.week); g.later = sorted(g.later);
-  g.done.sort((a, b) => String(b.returnedOn || b.purchased).localeCompare(String(a.returnedOn || a.purchased)));
-  return [['Due this week', g.week], ['Later', g.later], ['In progress', g.moving], ['Done', g.done]].filter(x => x[1].length);
+  const months = {}, now = today().slice(0, 7);
+  rest.sort((a, b) => String(b.purchased || '').localeCompare(String(a.purchased || '')));
+  for (const i of rest) { const k = String(i.purchased || '').slice(0, 7) || 'undated'; (months[k] = months[k] || []).push(i); }
+  const label = k => k === 'undated' ? 'Earlier' : k === now ? `Earlier in ${C.parseDate(k + '-01').toLocaleDateString('en-US', { month: 'long' })}` : C.parseDate(k + '-01').toLocaleDateString('en-US', { month: 'long', ...(k.slice(0, 4) === now.slice(0, 4) ? {} : { year: 'numeric' }) });
+  return [['Due this week', sorted(week), 'grid'], ['Needs a date', date, 'date'], ...Object.entries(months).map(([k, l]) => [label(k), l, 'grid'])].filter(x => x[1].length);
 }
+const stNeedsDate = i => `<button class="st-rcpt" data-open="${esc(i.id)}"><span class="st-ph">${stPhoto(i)}</span><span class="st-g2"><span class="st-k">${esc(i.retailer)} · ${i.channel === 'store' ? 'In store' : 'Online'}</span><b>${esc(i.name)}</b><small class="st-m sm">${money(i.price)} · We don’t have ${esc(i.retailer === 'Store not added' ? 'this store' : i.retailer)}’s policy yet</small><span class="st-pill b xs">Add the return window</span></span></button>`;
 
 function stPurchases() {
-  const q = galleryQuery.toLowerCase();
+  const q = galleryQuery.toLowerCase(), chip = ST_CHIPS.find(c => c[0] === stChipF);
   let list = items.filter(i => galleryFilter === 'progress' ? ['started', 'shipped'].includes(i.status) : galleryFilter === 'received' ? i.status === 'received' : galleryFilter === 'kept' ? i.status === 'kept' : true);
-  list = list.filter(i => (i.name + ' ' + i.retailer).toLowerCase().includes(q));
-  const undecided = items.filter(i => stOpen(i) && i.intent !== 'return').length;
-  const seg = [['all', 'All'], ['progress', 'In progress'], ['received', 'Returned']].map(([id, l]) => `<button data-gallery="${id}" class="${galleryFilter === id ? 'on' : ''}">${l}</button>`).join('');
+  list = list.filter(i => (i.name + ' ' + i.retailer).toLowerCase().includes(q) && (!chip || chip[2](i)));
+  const undecided = items.filter(i => stOpen(i) && !['return', 'keep'].includes(i.intent)).length;
+  const seg = `<div class="st-seg">${[['all', 'All'], ['progress', 'In progress'], ['received', 'Returned']].map(([id, l]) => `<button data-gallery="${id}" class="${galleryFilter === id ? 'on' : ''}">${l}</button>`).join('')}</div>`;
   const body = !items.length
-    ? `<div class="st-emptycard"><div class="st-fan sm" aria-hidden="true"><span></span><span class="plus">${ic('i-plus')}</span><span></span></div><h2 class="st-d2">Your next purchase <em>belongs here.</em></h2><p class="st-m">Scan the receipt and its photo, store and deadline fill in for you.</p><button class="st-pill b sm" data-add>${ic('i-scan', 's')}Scan a receipt</button></div>`
+    ? `<div class="st-emptycard dashed"><div class="st-fan sm" aria-hidden="true"><span class="a"></span><span class="plus">${ic('i-plus')}</span><span class="b"></span></div><h2 class="st-d2">Your next purchase <em>belongs here.</em></h2><p class="st-m">Scan the receipt and its photo, store and deadline fill in for you.</p><button class="st-pill b sm" data-add>${ic('i-scan', 's')}Scan a receipt</button></div>`
     : !list.length ? `<p class="st-m st-none">Nothing matches${q ? ' “' + esc(galleryQuery) + '”' : ''}.</p>`
-    : stGroups(list).map(([h, l]) => `<div class="st-sec"><h3 class="st-k">${h}</h3><span class="st-m sm">${l.length} item${l.length === 1 ? '' : 's'}</span></div><div class="st-grid">${l.map(stProd).join('')}</div>`).join('');
+    : stGroups(list).map(([h, l, kind]) => `<div class="st-g12"><div class="st-sec"><h3 class="st-t15">${h}</h3><span class="st-m sm">${l.length} item${l.length === 1 ? '' : 's'}</span></div>${kind === 'date' ? `<div class="st-g8">${l.map(stNeedsDate).join('')}</div>` : `<div class="st-grid">${l.map(stProd).join('')}</div>`}</div>`).join('');
   return `<section class="st st-purchases">
-${stHead(`Purchases <span class="st-count">${items.length}</span>`, stCirc('i-plus', 'data-add', 'Add a purchase'))}
-${items.length ? `<label class="st-search">${ic('i-search')}<input id="st-search" type="search" placeholder="Search stores or items" value="${esc(galleryQuery)}" autocomplete="off"></label>
-<div class="st-seg">${seg}</div>
-<div class="st-chips"><button class="st-chip" data-view="calendar">${ic('i-cal', 's')}Return dates</button><button class="st-chip" data-view="wallet">${ic('i-card', 's')}Money back</button><button class="st-chip" data-menu-go="history-log">${ic('i-list', 's')}Your story</button>${undecided ? `<button class="st-chip dark" data-view="decide">${ic('i-heart', 's')}${undecided} to decide</button>` : ''}</div>` : ''}
+${stHead(`Purchases${items.length ? ` <span class="st-count">${items.length}</span>` : ''}`, stCirc('i-plus', 'data-add', 'Add a purchase'))}
+${items.length ? `<div class="st-search">${ic('i-search')}<input id="st-search" type="search" placeholder="Search stores or items" value="${esc(galleryQuery)}" autocomplete="off" aria-label="Search stores or items"><button class="st-circ" data-add aria-label="Scan a receipt">${ic('i-cam')}</button></div>` : ''}
+${seg}
+${items.length ? `<div class="st-chips">${undecided ? `<button class="st-chip dark" data-view="decide">${ic('i-heart', 's')}${undecided} to decide</button>` : ''}<button class="st-chip icon${stChipF ? '' : ' on'}" data-st-chip="" aria-label="All purchases, no filter">${ic('i-filter', 's')}</button>${ST_CHIPS.map(([id, l]) => `<button class="st-chip${stChipF === id ? ' on' : ''}" data-st-chip="${id}" aria-pressed="${stChipF === id}">${l}</button>`).join('')}</div>` : ''}
 ${body}
 </section>`;
 }
@@ -247,6 +253,7 @@ function stSettings() {
 <div class="st-prof">${editableAvatar()}<h1 class="st-d1">${esc(stName() || 'You')}</h1>${user ? `<p class="st-m sm">${esc(user.email)}</p>` : ''}</div>
 <div class="st-stats3"><div><b>${r.returned}</b><span class="st-k">Returned</span></div><div><b>${stCents(Math.round(stBack()))}</b><span class="st-k">Back</span></div><div><b>${onTime}</b><span class="st-k">On time</span></div></div>
 <button class="st-promo" data-menu-go="email-import"><span class="st-k dk">Add purchases from email</span><span class="st-d2">Forward a receipt. <em>We’ll do the rest.</em></span><span class="st-pill w sm">${ic('i-mail', 's')}Set it up</span><span class="st-env" aria-hidden="true"></span></button>
+<div class="st-grp"><span class="st-k">Your returns</span><div class="st-list">${row('i-list', 'Your story', 'data-view="story"', stCents(Math.round(stBack())) + ' back')}${row('i-cal', 'Time to return', 'data-view="calendar"')}${row('i-card', 'Get it back', 'data-view="wallet"')}</div></div>
 <div class="st-grp"><span class="st-k">Preferences</span><div class="st-list">${row('i-bell', 'Reminders', 'data-view="reminders"', esc(settings.time || '09:00'))}${row('i-vibe', 'My vibe', 'data-view="vibe"', esc(VibeN.VOICES[VibeN.vibeOf(settings.vibe).voice].name))}</div></div>
 <div class="st-grp"><span class="st-k">Account</span><div class="st-list">${row('i-user', 'My profile', 'data-menu-go="my-profile"')}${row('i-shield', 'Security and privacy', 'data-menu-go="privacy"')}${row('i-doc', 'Terms of service', 'data-menu-go="terms"')}${user && user.admin ? row('i-list', 'Policy review', 'data-menu-go="policy-review"') : ''}</div></div>
 <div class="st-grp"><span class="st-k">Help</span><div class="st-list">${row('i-chat', 'Support', 'data-menu-go="support"')}${menuPages['returns-101'] ? row('i-help', 'Returns 101', 'data-menu-go="returns-101"') : ''}</div></div>
@@ -285,6 +292,7 @@ document.addEventListener('click', e => {
   if (!b) return;
   if (b.dataset.stWeek) { stWeek += Number(b.dataset.stWeek); calendarDay = null; render(); }
   if (b.dataset.stMoney) { stMoney = b.dataset.stMoney; render(); }
+  if (b.dataset.stChip !== undefined) { stChipF = stChipF === b.dataset.stChip ? '' : b.dataset.stChip; render(); }
   if (b.dataset.stTime) { settings.time = b.dataset.stTime; save(); render(); toast(`Your nudge comes at ${b.dataset.stTime}.`); }
   if (b.id === 'st-calendar-all') {
     const parts = items.map(i => C.calendar(i, today(), settings.time)).filter(Boolean);

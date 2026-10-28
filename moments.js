@@ -4,7 +4,8 @@
 const renderBeforeMoments = render;
 const MOMENT_VIEWS = ['welcome', 'alerts', 'decide', 'pass'];
 const ONBOARDED = 'returnly-onboarded-v1', ALERTS_SEEN = 'returnly-alerts-seen-v1';
-const WELCOME_STORES = ['Zara', 'Amazon', 'Nike', 'SHEIN', 'Target', 'Fashion Nova', 'Walmart', 'H&M'];
+const WELCOME_STORES = ['Zara', 'Target', 'Amazon', 'Nike', 'Fashion Nova', 'SHEIN', 'Walmart', 'H&M'];
+const WELCOME_PHOTOS = { Zara: 's-cardigan', Target: 's-loafers', Amazon: 's-shoulderbag', Nike: 's-sneakers', 'Fashion Nova': 's-dress', SHEIN: 's-dress', Walmart: 's-tote', 'H&M': 's-cardigan' };
 let stWelcomeStep = 0, stAlertTab = 'all', stDeckSkip = [], stPassId = null, stPassBack = 'plan';
 const stGet = (k, f) => { try { const v = localStorage.getItem(k); return v === null ? f : JSON.parse(v); } catch { return f; } };
 const stSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };
@@ -15,8 +16,8 @@ function stWelcome() {
   if (stWelcomeStep === 0) {
     const mine = profile.stores || [];
     return `<section class="st st-welcome">${bar(1)}
-<h1 class="st-d1 st-center">Where do you <em>shop?</em></h1><p class="st-m st-center">Pick a few. We’ll look out for their orders and know their return rules.</p>
-<div class="st-stores">${WELCOME_STORES.map(s => `<button class="st-store${mine.includes(s) ? ' on' : ''}" data-st-store="${esc(s)}" aria-pressed="${mine.includes(s)}"><span>${esc(s)}</span><i aria-hidden="true">${ic('i-check', 's')}</i></button>`).join('')}</div>
+<h1 class="st-d1 st-center">Where do you <em>shop?</em></h1><p class="st-m st-center">We’ve checked the return policies of these stores. Pick yours.</p>
+<div class="st-stores">${WELCOME_STORES.map((s, k) => `<button class="st-store ph${mine.includes(s) ? ' on' : ''}" data-st-store="${esc(s)}" aria-pressed="${mine.includes(s)}"><img src="assets/${WELCOME_PHOTOS[s]}.jpg" alt="" class="${k > 4 ? 'alt' : ''}"><span>${esc(s)}</span><i aria-hidden="true">${ic('i-check', 's')}</i></button>`).join('')}</div>
 <div class="st-obfoot"><button class="st-pill cb full" data-st-welcome="1">Continue ${ic('i-right', 's')}</button><button class="st-link" data-st-welcome="1">Skip for now</button></div></section>`;
   }
   if (stWelcomeStep === 1) {
