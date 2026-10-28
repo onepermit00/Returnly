@@ -12,6 +12,7 @@ const stOpen = i => !['started', 'shipped', 'received', 'kept'].includes(i.statu
 const stFirst = s => s && s.length > 1 && s[1] === s[1].toLowerCase() ? s[0].toLowerCase() + s.slice(1) : s;
 const stShort = d => d ? C.parseDate(d).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) : '';
 const stCents = n => money(n).replace(/\.00$/, '');
+const stBack = () => items.filter(i => i.status === 'received').reduce((n, i) => n + (Number(i.received) || 0), 0);
 const stName = () => (typeof welcomeName === 'function' && welcomeName()) || '';
 
 /* The chip on a photo or row: coral for today, lime for three days or fewer, blue once a return is moving. */
@@ -84,7 +85,7 @@ function stHome() {
   const paid = items.filter(i => i.status === 'received').length;
   const rest = open.filter(i => i !== top).slice(0, 8);
   const date = new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
-  const head = `<header class="st-head st-homehead"><button class="st-me" data-view="settings" aria-label="Open my settings"><span class="st-ava">${avatarInner()}</span><span class="st-hi"><span class="st-k">${esc(date)}</span><b>Hi${stName() ? ', ' + esc(stName()) : ' there'}</b></span></button><div class="st-r">${stCirc('i-search', 'data-view="overview"', 'Search purchases')}${stCirc('i-bell', 'data-view="reminders"', 'Reminders', week > 0)}</div></header>`;
+  const head = `<header class="st-head st-homehead"><button class="st-me" data-view="settings" aria-label="Open my settings"><span class="st-ava">${avatarInner()}</span><span class="st-hi"><span class="st-k">${esc(date)}</span><b>Hi${stName() ? ', ' + esc(stName()) : ' there'}</b></span></button><div class="st-r">${stCirc('i-search', 'data-view="overview"', 'Search purchases')}${stCirc('i-bell', 'data-view="alerts"', 'Alerts', typeof stAlertsNew === 'function' ? stAlertsNew() : week > 0)}</div></header>`;
   if (!mine && !items.length) return `<section class="st st-home">${head}${stHomeEmpty()}</section>`;
   const missed = items.filter(i => i.intent === 'return' && !['started', 'shipped', 'received', 'kept'].includes(i.status) && stDays(i) !== null && stDays(i) < 0).length;
   const done = items.filter(i => ['shipped', 'received'].includes(i.status)).length;
@@ -92,7 +93,7 @@ function stHome() {
 ${focus || `<article class="st-calm"><span class="st-k">All caught up</span><h2 class="st-d2">Nothing is due. <em>Enjoy your things.</em></h2><p class="st-m">We’ll tell you when a return window is about to close.</p><button class="st-pill b sm" data-add>${ic('i-scan', 's')}Scan a receipt</button></article>`}
 <div class="st-3"><button data-view="overview"><b class="st-n">${stCents(Math.round(s.tracked))}</b><span>still in your window</span></button><button data-view="calendar"><b class="st-n">${week}</b><span>due this week</span></button><button data-view="wallet"><b class="st-n">${shipped.length}</b><span>money on its way</span></button></div>
 ${rest.length ? `<div class="st-sec"><h3 class="st-d2">Due <em>soonest</em></h3><button class="st-count" data-view="calendar">${open.length}</button></div><div class="st-hs">${rest.map(stProd).join('')}</div>` : ''}
-<article class="st-money"><span class="st-coins" aria-hidden="true"><i></i><i></i></span><span class="st-k dk">Money back so far</span><p class="st-n">${money(s.saved)}</p><div class="st-prog"><i style="width:${s.saved + pending ? Math.round(100 * s.saved / (s.saved + pending)) : 0}%"></i></div><p class="st-sm">${paid} return${paid === 1 ? '' : 's'} paid out${pending ? ' · ' + money(pending) + ' on its way' : ''}</p><button class="st-pill w sm" data-view="wallet">See results ${ic('i-right', 's')}</button></article>
+<article class="st-money"><span class="st-coins" aria-hidden="true"><i></i><i></i></span><span class="st-k dk">Money back so far</span><p class="st-n">${money(stBack())}</p><div class="st-prog"><i style="width:${stBack() + pending ? Math.round(100 * stBack() / (stBack() + pending)) : 0}%"></i></div><p class="st-sm">${paid} return${paid === 1 ? '' : 's'} paid out${pending ? ' · ' + money(pending) + ' on its way' : ''}</p><button class="st-pill w sm" data-view="wallet">See results ${ic('i-right', 's')}</button></article>
 ${done ? `<article class="st-card st-streak"><div class="st-sb"><span class="st-k">${missed ? 'Returns sent on time' : 'No missed windows'}</span><b>${done} in a row</b></div><div class="st-meter">${Array.from({ length: 6 }, (_, k) => `<i class="${k < Math.min(done, 6) ? 'on' : k === Math.min(done, 6) && focus ? 'hot' : ''}"></i>`).join('')}</div>${focus ? '<p class="st-m">Send today’s return to keep it going.</p>' : ''}</article>` : ''}
 </section>`;
 }
@@ -126,7 +127,7 @@ function stPurchases() {
 ${stHead(`Purchases <span class="st-count">${items.length}</span>`, stCirc('i-plus', 'data-add', 'Add a purchase'))}
 ${items.length ? `<label class="st-search">${ic('i-search')}<input id="st-search" type="search" placeholder="Search stores or items" value="${esc(galleryQuery)}" autocomplete="off"></label>
 <div class="st-seg">${seg}</div>
-<div class="st-chips"><button class="st-chip" data-view="calendar">${ic('i-cal', 's')}Return dates</button><button class="st-chip" data-view="wallet">${ic('i-card', 's')}Money back</button><button class="st-chip" data-menu-go="history-log">${ic('i-list', 's')}Your story</button>${undecided ? `<span class="st-chip quiet">${undecided} to decide</span>` : ''}</div>` : ''}
+<div class="st-chips"><button class="st-chip" data-view="calendar">${ic('i-cal', 's')}Return dates</button><button class="st-chip" data-view="wallet">${ic('i-card', 's')}Money back</button><button class="st-chip" data-menu-go="history-log">${ic('i-list', 's')}Your story</button>${undecided ? `<button class="st-chip dark" data-view="decide">${ic('i-heart', 's')}${undecided} to decide</button>` : ''}</div>` : ''}
 ${body}
 </section>`;
 }
@@ -172,7 +173,7 @@ ${calOk ? `<button class="st-pill g sm" id="st-calendar-all">${ic('i-cal', 's')}
 /* ---------- Results (wallet) ---------- */
 function stWallet() {
   const r = resultValues(), shipped = items.filter(i => i.status === 'shipped'), started = items.filter(i => i.status === 'started');
-  const pending = shipped.reduce((n, i) => n + (Number(i.price) || 0), 0), total = r.refund + r.credit;
+  const pending = shipped.reduce((n, i) => n + (Number(i.price) || 0), 0), total = stBack();
   const back = items.filter(i => i.status === 'received' && (stMoney === 'all' || i.outcome === stMoney)).sort((a, b) => String(b.returnedOn || '').localeCompare(String(a.returnedOn || '')));
   const moving = [...shipped, ...started];
   const stage = i => i.status === 'started' ? 2 : 3;
@@ -244,7 +245,7 @@ function stSettings() {
   const row = (icon, label, attrs, val) => `<button class="st-li" ${attrs}>${ic(icon)}<span class="st-grow">${label}</span>${val ? `<span class="st-val">${val}</span>` : ''}${ic('i-chev', 'chev')}</button>`;
   return `<section class="st st-settings">
 <div class="st-prof">${editableAvatar()}<h1 class="st-d1">${esc(stName() || 'You')}</h1>${user ? `<p class="st-m sm">${esc(user.email)}</p>` : ''}</div>
-<div class="st-stats3"><div><b>${r.returned}</b><span class="st-k">Returned</span></div><div><b>${stCents(Math.round(r.refund + r.credit))}</b><span class="st-k">Back</span></div><div><b>${onTime}</b><span class="st-k">On time</span></div></div>
+<div class="st-stats3"><div><b>${r.returned}</b><span class="st-k">Returned</span></div><div><b>${stCents(Math.round(stBack()))}</b><span class="st-k">Back</span></div><div><b>${onTime}</b><span class="st-k">On time</span></div></div>
 <button class="st-promo" data-menu-go="email-import"><span class="st-k dk">Add purchases from email</span><span class="st-d2">Forward a receipt. <em>We’ll do the rest.</em></span><span class="st-pill w sm">${ic('i-mail', 's')}Set it up</span><span class="st-env" aria-hidden="true"></span></button>
 <div class="st-grp"><span class="st-k">Preferences</span><div class="st-list">${row('i-bell', 'Reminders', 'data-view="reminders"', esc(settings.time || '09:00'))}${row('i-vibe', 'My vibe', 'data-view="vibe"', esc(VibeN.VOICES[VibeN.vibeOf(settings.vibe).voice].name))}</div></div>
 <div class="st-grp"><span class="st-k">Account</span><div class="st-list">${row('i-user', 'My profile', 'data-menu-go="my-profile"')}${row('i-shield', 'Security and privacy', 'data-menu-go="privacy"')}${row('i-doc', 'Terms of service', 'data-menu-go="terms"')}${user && user.admin ? row('i-list', 'Policy review', 'data-menu-go="policy-review"') : ''}</div></div>
